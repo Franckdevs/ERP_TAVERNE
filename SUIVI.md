@@ -326,6 +326,11 @@ c:\ERP_TARVERNE\
   - **Routage** : `App.tsx` → `#/comptabilite` ; la `SpaceModal` y redirige déjà à la
     connexion à l'espace « Comptabilité ». Déconnexion via `LogoutConfirm`.
 
+- **Mise en ligne GitHub** : dépôt initialisé à la racine (`c:\ERP_TARVERNE`),
+  `README.md` + `.gitignore` racine (ignore `node_modules/`, `dist/`, `.env`).
+  Premier commit `first commit` (85 fichiers, **sans `node_modules`**) poussé sur
+  **https://github.com/Franckdevs/ERP_TAVERNE** (branche `main`).
+
 ---
 
 ## ▶️ Commandes
