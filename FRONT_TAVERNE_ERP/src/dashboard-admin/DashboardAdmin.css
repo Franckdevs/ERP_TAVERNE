@@ -1,0 +1,76 @@
+/* ===========================================================================
+   Dashboard administrateur — layout
+   --------------------------------------------------------------------------- */
+.dash {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--background);
+}
+
+.dash__main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.dash__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: clamp(1rem, 3vw, 2rem);
+}
+
+.dash__row {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.dash__row--charts {
+  grid-template-columns: 1.7fr 1fr;
+}
+
+.dash__row--bottom {
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 1100px) {
+  .dash__row--charts,
+  .dash__row--bottom {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===========================================================================
+   Carte générique (partagée par les blocs du dashboard)
+   --------------------------------------------------------------------------- */
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.35rem 1.5rem 1.5rem;
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: 0 1px 2px rgba(60, 36, 14, 0.04);
+}
+
+.card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.card__title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.card__sub {
+  margin-top: 0.15rem;
+  font-size: 0.8rem;
+  color: var(--muted-foreground);
+}

@@ -1,0 +1,182 @@
+/* --- Modal « Nouvel article » -------------------------------------------- */
+.nim {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+}
+
+.nim__overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(28, 18, 10, 0.55);
+  backdrop-filter: blur(2px);
+  animation: nim-fade 0.18s ease-out;
+}
+
+.nim__panel {
+  position: relative;
+  width: 100%;
+  max-width: 34rem;
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-card);
+  animation: nim-pop 0.2s ease-out;
+}
+
+.nim__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 1.4rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.nim__title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--foreground);
+}
+
+.nim__close {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--muted-foreground);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.nim__close:hover {
+  background-color: var(--muted);
+  color: var(--foreground);
+}
+
+.nim__close svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+/* --- Formulaire ---------------------------------------------------------- */
+.nim__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.4rem;
+}
+
+.nim__row {
+  display: flex;
+  gap: 0.9rem;
+}
+
+.nim__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.nim__field--grow {
+  flex: 2;
+}
+
+.nim__label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+}
+
+.nim__input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background-color: var(--background);
+  color: var(--foreground);
+  font: inherit;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.nim__input:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 16%, transparent);
+}
+
+.nim__error {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #c0392b;
+}
+
+/* --- Actions ------------------------------------------------------------- */
+.nim__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.7rem;
+  margin-top: 0.3rem;
+}
+
+.nim__btn {
+  padding: 0.6rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.65rem;
+  background-color: var(--card);
+  color: var(--foreground);
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+    transform 0.15s ease, filter 0.15s ease;
+}
+
+.nim__btn:hover {
+  background-color: var(--muted);
+}
+
+.nim__btn--primary {
+  border-color: transparent;
+  color: #fff;
+  background-image: linear-gradient(150deg, var(--brand-light), var(--brand));
+  box-shadow: 0 10px 20px -12px rgba(168, 92, 31, 0.9);
+}
+
+.nim__btn--primary:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  background-image: linear-gradient(150deg, var(--brand-light), var(--brand));
+}
+
+@keyframes nim-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes nim-pop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nim__overlay,
+  .nim__panel {
+    animation: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .nim__row {
+    flex-direction: column;
+  }
+}

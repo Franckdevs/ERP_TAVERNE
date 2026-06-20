@@ -1,0 +1,114 @@
+/* --- Modal de confirmation de déconnexion -------------------------------- */
+.lc__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background-color: rgba(33, 20, 8, 0.55);
+  backdrop-filter: blur(4px);
+  animation: lc-fade 0.16s ease-out;
+}
+
+.lc {
+  position: relative;
+  width: 100%;
+  max-width: 23rem;
+  padding: 1.9rem 1.75rem 1.5rem;
+  text-align: center;
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 1.1rem;
+  box-shadow: 0 30px 70px -30px rgba(60, 36, 14, 0.6);
+  animation: lc-rise 0.2s ease-out both;
+}
+
+.lc__icon {
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  color: var(--brand);
+  background-color: var(--soft);
+}
+
+.lc__icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.lc__title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.lc__text {
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--muted-foreground);
+  font-size: 0.95rem;
+}
+
+.lc__actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.lc__btn {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.7rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  transition: background-color 0.15s ease, color 0.15s ease,
+    border-color 0.15s ease, transform 0.05s ease;
+}
+
+.lc__btn:active {
+  transform: translateY(1px);
+}
+
+.lc__btn--ghost {
+  background-color: var(--card);
+  border-color: var(--border);
+  color: var(--foreground);
+}
+
+.lc__btn--ghost:hover {
+  background-color: var(--muted);
+}
+
+.lc__btn--primary {
+  background-image: linear-gradient(180deg, var(--brand-light), var(--brand));
+  color: #fff;
+  box-shadow: 0 10px 22px -12px rgba(139, 69, 19, 0.8);
+}
+
+.lc__btn--primary:hover {
+  background-image: linear-gradient(180deg, var(--brand), var(--brand-dark));
+}
+
+@keyframes lc-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes lc-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lc__overlay,
+  .lc {
+    animation: none;
+  }
+}

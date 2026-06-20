@@ -1,0 +1,78 @@
+/* --- Suivi des projets --------------------------------------------------- */
+.projects {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+}
+
+.project__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.55rem;
+}
+
+.project__name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.project__client {
+  font-size: 0.8rem;
+  color: var(--muted-foreground);
+}
+
+.project__status {
+  flex-shrink: 0;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.project__status.is-progress {
+  color: #2f8f4e;
+  background-color: #e7f4ec;
+}
+
+.project__status.is-finishing {
+  color: #b5791b;
+  background-color: #fbefd6;
+}
+
+.project__status.is-starting {
+  color: var(--muted-foreground);
+  background-color: var(--muted);
+}
+
+.project__bar {
+  height: 0.5rem;
+  border-radius: 999px;
+  background-color: var(--muted);
+  overflow: hidden;
+}
+
+.project__bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background-image: linear-gradient(90deg, var(--brand-light), var(--brand));
+  animation: project-grow 0.9s ease-out both;
+}
+
+@keyframes project-grow {
+  from {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project__bar-fill {
+    animation: none;
+  }
+}

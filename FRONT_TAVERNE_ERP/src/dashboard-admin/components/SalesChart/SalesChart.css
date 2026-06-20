@@ -1,0 +1,77 @@
+/* --- Carte graphique ventes ---------------------------------------------- */
+.sales__svg {
+  width: 100%;
+  height: 230px;
+  display: block;
+  margin-top: 0.5rem;
+}
+
+.sales__months {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.4rem;
+  font-size: 0.68rem;
+  color: var(--muted-foreground);
+}
+
+/* --- Sélecteur d'année --------------------------------------------------- */
+.seg {
+  display: inline-flex;
+  padding: 0.2rem;
+  gap: 0.2rem;
+  background-color: var(--muted);
+  border-radius: 0.6rem;
+}
+
+.seg__btn {
+  padding: 0.3rem 0.75rem;
+  border: none;
+  border-radius: 0.45rem;
+  background: transparent;
+  color: var(--muted-foreground);
+  font-size: 0.82rem;
+  font-weight: 600;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.seg__btn.is-active {
+  background-color: var(--card);
+  color: var(--brand);
+  box-shadow: 0 1px 2px rgba(60, 36, 14, 0.12);
+}
+
+/* --- Animation de tracé -------------------------------------------------- */
+.sales__line {
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  animation: sales-draw 1.4s ease-out forwards;
+}
+
+.sales__area {
+  opacity: 0;
+  animation: sales-fade 1s ease-out 0.6s forwards;
+}
+
+@keyframes sales-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes sales-fade {
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sales__line {
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+    animation: none;
+  }
+  .sales__area {
+    opacity: 1;
+    animation: none;
+  }
+}

@@ -1,0 +1,54 @@
+/* --- Carte répartition des dépenses (donut) ------------------------------ */
+.donut {
+  display: grid;
+  place-items: center;
+  padding: 0.5rem 0 1.25rem;
+}
+
+.donut__svg {
+  width: 11rem;
+  height: 11rem;
+}
+
+.donut__value {
+  font-size: 1.7rem;
+  font-weight: 800;
+  fill: var(--foreground);
+}
+
+.donut__unit {
+  font-size: 0.62rem;
+  fill: var(--muted-foreground);
+}
+
+/* --- Légende ------------------------------------------------------------- */
+.donut__legend {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.donut__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+}
+
+.donut__dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.donut__legend-label {
+  color: var(--foreground);
+}
+
+.donut__legend-pct {
+  margin-left: auto;
+  font-weight: 700;
+  color: var(--muted-foreground);
+}

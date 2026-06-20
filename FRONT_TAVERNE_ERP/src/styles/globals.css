@@ -1,0 +1,93 @@
+/* ===========================================================================
+   ERP Taverne — Feuille de styles globale
+   Couleur principale : brun Saddlebrown #8B4513
+   --------------------------------------------------------------------------- */
+
+:root {
+  /* --- Palette de marque ----------------------------------------------- */
+  /* Mode clair : --primary → brun Saddlebrown #8B4513 */
+  --primary: oklch(0.45 0.12 47);
+  --primary-foreground: oklch(0.99 0.01 80);
+
+  /* Déclinaisons du brun */
+  --primary-hover: oklch(0.4 0.12 47);
+  --primary-active: oklch(0.35 0.11 47);
+
+  /* Brun en hexadécimal (dégradés, bordures…) */
+  --brand: #8b4513;
+  --brand-light: #a85c1f;
+  --brand-dark: #6e3610;
+
+  /* --- Surfaces & texte ------------------------------------------------ */
+  --background: #fbf9f6; /* fond de page (crème chaud) */
+  --foreground: #211a14; /* texte principal (presque noir chaud) */
+  --card: #ffffff;
+  --card-foreground: #211a14;
+
+  --section: #f4ebe0; /* bandeau « applications » (beige clair) */
+  --soft: #f3e7d8; /* pastilles, pucks d'icônes clairs */
+  --soft-foreground: #8b4513;
+
+  --muted: #f5efe8;
+  --muted-foreground: #6f655b;
+  --border: #ece3d8;
+  --ring: #8b4513;
+
+  /* Bloc CTA foncé */
+  --brown-dark-1: #2a1a0f;
+  --brown-dark-2: #4a2f1a;
+
+  /* --- Typographie & rayons ------------------------------------------- */
+  --font-sans: "Segoe UI", system-ui, -apple-system, "Helvetica Neue",
+    Arial, sans-serif;
+  --radius: 0.85rem;
+  --shadow-card: 0 18px 40px -24px rgba(80, 48, 20, 0.4);
+
+  color-scheme: light;
+}
+
+/* La landing est conçue en mode clair (fond crème). On ne suit volontairement
+   pas le thème sombre du système pour rester fidèle à la maquette. */
+
+/* ---------------------------------------------------------------------------
+   Reset léger
+   --------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  /* Taille de base réduite → toute l'UI (polices, boutons, espacements,
+     largeurs en rem) est rétrécie proportionnellement. */
+  font-size: 87.5%; /* 16px → 14px */
+  scroll-behavior: smooth;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--background);
+  color: var(--foreground);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}

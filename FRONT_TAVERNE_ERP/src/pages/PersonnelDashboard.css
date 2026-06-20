@@ -1,0 +1,357 @@
+/* ===========================================================================
+   Ressources Humaines — Espace Personnel
+   (réutilise la coquille « dash » d'AssistantDashboard.css ; ici le spécifique)
+   --------------------------------------------------------------------------- */
+
+/* --- Valeurs de KPI colorées --------------------------------------------- */
+.rh-val--green {
+  color: #2f8f4e;
+}
+.rh-val--amber {
+  color: #9a6b1f;
+}
+
+/* Bandeau de 3 stats (vues congés / paie) */
+.rh-stats--3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* --- Barre d'outils (filtre + bouton) ------------------------------------ */
+.rh-toolbar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.rh-filter select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 0.55rem 2rem 0.55rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background-color: var(--card);
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
+    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
+  background-position: calc(100% - 1rem) center, calc(100% - 0.7rem) center;
+  background-size: 0.35rem 0.35rem, 0.35rem 0.35rem;
+  background-repeat: no-repeat;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--foreground);
+  cursor: pointer;
+}
+
+.rh-filter select:focus {
+  outline: none;
+  border-color: var(--brand);
+}
+
+/* --- Table des employés -------------------------------------------------- */
+.rh-table-wrap {
+  overflow-x: auto;
+  margin: 0 -0.25rem;
+}
+
+.rh-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.rh-table thead th {
+  padding: 0.7rem 0.9rem;
+  text-align: left;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.rh-table tbody td {
+  padding: 0.75rem 0.9rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--foreground);
+  vertical-align: middle;
+}
+
+.rh-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.rh-table tbody tr:hover td {
+  background-color: color-mix(in srgb, var(--brand) 4%, var(--card));
+}
+
+.rh-num {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.rh-muted {
+  color: var(--muted-foreground);
+}
+
+.rh-salary {
+  font-weight: 800;
+}
+
+.rh-cell-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.rh-name {
+  font-weight: 700;
+}
+
+.rh-avatar {
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  flex-shrink: 0;
+  border-radius: 0.55rem;
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: #fff;
+  background-image: linear-gradient(150deg, var(--brand-light), var(--brand-dark));
+}
+
+/* Lien « voir tout » sous un tableau */
+.rh-more {
+  align-self: flex-start;
+  margin-top: 0.9rem;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--brand);
+  cursor: pointer;
+}
+
+.rh-more:hover {
+  text-decoration: underline;
+}
+
+/* --- Étiquettes de contrat ----------------------------------------------- */
+.rh-contract {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.rh-contract--cdi {
+  color: var(--brand);
+  background-color: var(--soft);
+}
+.rh-contract--cdd {
+  color: #3f7c9a;
+  background-color: color-mix(in srgb, #3f7c9a 15%, var(--card));
+}
+.rh-contract--stage {
+  color: #7a5cb0;
+  background-color: color-mix(in srgb, #7a5cb0 15%, var(--card));
+}
+.rh-contract--intérim,
+.rh-contract--interim {
+  color: #9a6b1f;
+  background-color: color-mix(in srgb, #c79a3a 18%, var(--card));
+}
+
+/* --- Pastilles de statut (présence + congés) ----------------------------- */
+.rh-status {
+  display: inline-block;
+  flex-shrink: 0;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.rh-status--present,
+.rh-status--approuve {
+  color: #2f8f4e;
+  background-color: color-mix(in srgb, #2f8f4e 15%, var(--card));
+}
+.rh-status--conge,
+.rh-status--attente {
+  color: #9a6b1f;
+  background-color: color-mix(in srgb, #c79a3a 18%, var(--card));
+}
+.rh-status--absent,
+.rh-status--refuse {
+  color: #b5462f;
+  background-color: color-mix(in srgb, #d64545 14%, var(--card));
+}
+.rh-status--remote {
+  color: #3f7c9a;
+  background-color: color-mix(in srgb, #3f7c9a 15%, var(--card));
+}
+
+/* --- Résumé de présence (pastilles colorées) ----------------------------- */
+.rh-presence {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+.rh-presence__row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+  background-color: color-mix(in srgb, var(--brand) 3%, var(--card));
+}
+
+.rh-presence__label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+}
+
+.rh-presence__value {
+  margin-left: auto;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.rh-dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+.rh-dot--present {
+  background-color: #2f8f4e;
+}
+.rh-dot--remote {
+  background-color: #3f7c9a;
+}
+.rh-dot--conge {
+  background-color: #c79a3a;
+}
+.rh-dot--absent {
+  background-color: #d64545;
+}
+
+/* --- Actions de congés (approuver / refuser) ----------------------------- */
+.rh-leave-actions {
+  display: inline-flex;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.rh-act {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  background-color: var(--card);
+  transition: background-color 0.15s ease, color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.rh-act--ok {
+  color: #2f8f4e;
+  border-color: color-mix(in srgb, #2f8f4e 40%, var(--border));
+}
+.rh-act--ok:hover {
+  color: #fff;
+  background-color: #2f8f4e;
+  border-color: #2f8f4e;
+}
+.rh-act--no {
+  color: #b5462f;
+  border-color: color-mix(in srgb, #d64545 40%, var(--border));
+}
+.rh-act--no:hover {
+  color: #fff;
+  background-color: #d64545;
+  border-color: #d64545;
+}
+
+/* --- Montants (paie) ----------------------------------------------------- */
+.rh-amount {
+  flex-shrink: 0;
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--foreground);
+}
+
+/* --- Barres de répartition des contrats ---------------------------------- */
+.rh-bars {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.rh-bar__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+
+.rh-bar__value {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--muted-foreground);
+}
+
+.rh-bar__track {
+  height: 0.6rem;
+  border-radius: 999px;
+  background-color: var(--muted);
+  overflow: hidden;
+}
+
+.rh-bar__fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+}
+.rh-bar__fill--cdi {
+  background-image: linear-gradient(90deg, var(--brand-light), var(--brand));
+}
+.rh-bar__fill--cdd {
+  background-color: #3f7c9a;
+}
+.rh-bar__fill--stage {
+  background-color: #7a5cb0;
+}
+.rh-bar__fill--intérim,
+.rh-bar__fill--interim {
+  background-color: #c79a3a;
+}
+
+/* --- Responsive ---------------------------------------------------------- */
+@media (max-width: 1100px) {
+  .rh-stats--3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .rh-presence {
+    grid-template-columns: 1fr;
+  }
+  .rh-leave-actions {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,544 @@
+/* ===========================================================================
+   Messagerie (type WhatsApp)
+   --------------------------------------------------------------------------- */
+.msg {
+  display: flex;
+  flex-direction: column;
+  width: 23rem;
+  height: min(36rem, 78vh);
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 30px 70px -28px rgba(60, 36, 14, 0.55);
+}
+
+/* --- En-tête ------------------------------------------------------------- */
+.msg__head {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.85rem 1rem;
+  color: #f3e7d8;
+  background-image: linear-gradient(150deg, #3a2416, var(--brown-dark-1));
+}
+
+.msg__head-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.msg__head .msg__icon {
+  margin-left: auto;
+}
+
+.msg__head--chat .msg__icon:first-child {
+  margin-left: 0;
+}
+
+.msg__head-actions {
+  display: flex;
+  gap: 0.25rem;
+  margin-left: auto;
+}
+
+.msg__icon {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: inherit;
+  transition: background-color 0.15s ease;
+}
+
+.msg__icon:hover {
+  background-color: rgba(255, 255, 255, 0.14);
+}
+
+.msg__icon svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.msg__peer {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  min-width: 0;
+}
+
+.msg__peer-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.msg__peer-status {
+  font-size: 0.72rem;
+  color: #d8c7b5;
+}
+
+/* --- Avatars ------------------------------------------------------------- */
+.avatar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.avatar--sm {
+  width: 2.1rem;
+  height: 2.1rem;
+  font-size: 0.72rem;
+}
+
+.avatar__dot {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background-color: #4caf50;
+  border: 2px solid var(--card);
+}
+
+/* --- Recherche ----------------------------------------------------------- */
+.msg__search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.75rem 0.85rem 0.25rem;
+  padding: 0 0.75rem;
+  background-color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+}
+
+.msg__search svg {
+  width: 1rem;
+  height: 1rem;
+  color: var(--muted-foreground);
+}
+
+.msg__search input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.55rem 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  color: var(--foreground);
+}
+
+/* --- Liste des discussions ----------------------------------------------- */
+.msg__threads {
+  list-style: none;
+  overflow-y: auto;
+  flex: 1;
+  padding: 0.4rem 0.5rem;
+}
+
+.thread {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 0.7rem;
+  background: transparent;
+  text-align: left;
+  transition: background-color 0.15s ease;
+}
+
+.thread:hover {
+  background-color: var(--muted);
+}
+
+.thread__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.thread__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.thread__name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.thread__time {
+  font-size: 0.7rem;
+  color: var(--muted-foreground);
+  flex-shrink: 0;
+}
+
+.thread__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.1rem;
+}
+
+.thread__preview {
+  font-size: 0.8rem;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.thread__badge {
+  flex-shrink: 0;
+  min-width: 1.15rem;
+  height: 1.15rem;
+  padding: 0 0.3rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background-color: var(--brand);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+/* --- Flux des messages --------------------------------------------------- */
+.msg__stream {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.9rem;
+  background-color: #f6efe6;
+}
+
+.bubble {
+  display: flex;
+  max-width: 80%;
+}
+
+.bubble--me {
+  align-self: flex-end;
+}
+
+.bubble--them {
+  align-self: flex-start;
+}
+
+.bubble__body {
+  position: relative;
+  padding: 0.5rem 0.7rem 0.35rem;
+  border-radius: 0.85rem;
+  font-size: 0.88rem;
+  box-shadow: 0 1px 1px rgba(60, 36, 14, 0.08);
+}
+
+.bubble--them .bubble__body {
+  background-color: #fff;
+  border-bottom-left-radius: 0.25rem;
+}
+
+.bubble--me .bubble__body {
+  background-color: #f0ddc6;
+  border-bottom-right-radius: 0.25rem;
+}
+
+.bubble__text {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.bubble__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  justify-content: flex-end;
+  margin-top: 0.15rem;
+  font-size: 0.62rem;
+  color: var(--muted-foreground);
+}
+
+.bubble__check {
+  width: 0.9rem;
+  height: 0.9rem;
+  color: #4a9bd6;
+}
+
+/* --- Pièces jointes ------------------------------------------------------ */
+.att {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.att--media {
+  position: relative;
+  width: 12rem;
+  height: 7rem;
+  justify-content: center;
+  border-radius: 0.6rem;
+  color: #fff;
+  font-size: 0.8rem;
+  background-image: linear-gradient(135deg, #a85c1f, #5a3210);
+}
+
+.att--media svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.att--video {
+  background-image: linear-gradient(135deg, #3a2416, #1c120a);
+}
+
+.att__play {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.85);
+  color: #3a2416;
+}
+
+.att--voice {
+  min-width: 11rem;
+}
+
+.att__voice-btn {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: var(--brand);
+  color: #fff;
+}
+
+.att__voice-btn svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.att__wave {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+}
+
+.att__wave i {
+  display: block;
+  width: 3px;
+  border-radius: 2px;
+  background-color: var(--brand);
+  opacity: 0.55;
+}
+
+.att__dur {
+  font-size: 0.72rem;
+  color: var(--muted-foreground);
+}
+
+.att--doc {
+  min-width: 11rem;
+  padding: 0.3rem 0;
+}
+
+.att__doc-icon {
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  flex-shrink: 0;
+  border-radius: 0.5rem;
+  background-color: var(--soft);
+  color: var(--brand);
+}
+
+.att__doc-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+/* --- Zone de saisie ------------------------------------------------------ */
+.composer {
+  position: relative;
+  border-top: 1px solid var(--border);
+  background-color: var(--card);
+  padding: 0.6rem;
+}
+
+.composer__row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.composer__input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  outline: none;
+  background-color: var(--muted);
+  font: inherit;
+  color: var(--foreground);
+}
+
+.composer__input:focus {
+  border-color: var(--brand);
+}
+
+.composer__btn {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.composer__btn:hover,
+.composer__btn.is-active {
+  color: var(--brand);
+  background-color: var(--soft);
+}
+
+.composer__btn svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.composer__btn--send,
+.composer__btn--mic {
+  background-image: linear-gradient(180deg, var(--brand-light), var(--brand));
+  color: #fff;
+}
+
+.composer__btn--send:hover,
+.composer__btn--mic:hover {
+  color: #fff;
+  background-image: linear-gradient(180deg, var(--brand), var(--brand-dark));
+}
+
+.composer__btn--cancel {
+  background-color: #fbe9e7;
+  color: #c0392b;
+}
+
+/* --- Menu pièces jointes ------------------------------------------------- */
+.composer__attach {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+  background-color: var(--card);
+}
+
+.attach-opt {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.5rem 0.6rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: transparent;
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--foreground);
+  text-align: left;
+  transition: background-color 0.15s ease;
+}
+
+.attach-opt:hover {
+  background-color: var(--muted);
+}
+
+.attach-opt__icon {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  background-color: var(--soft);
+  color: var(--brand);
+}
+
+.attach-opt__icon svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+/* --- Enregistrement vocal ------------------------------------------------ */
+.composer__rec {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.3rem 0.4rem;
+}
+
+.composer__rec-dot {
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  background-color: #c0392b;
+  animation: rec-pulse 1s ease-in-out infinite;
+}
+
+.composer__rec-time {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+}
+
+@keyframes rec-pulse {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .composer__rec-dot {
+    animation: none;
+  }
+}
+
+/* --- Responsive ---------------------------------------------------------- */
+@media (max-width: 480px) {
+  .msg {
+    width: calc(100vw - 1.5rem);
+    height: 80vh;
+  }
+}

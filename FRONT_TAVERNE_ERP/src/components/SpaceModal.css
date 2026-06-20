@@ -1,0 +1,548 @@
+/* ===========================================================================
+   Modal « Choisissez votre espace » → « Connexion à votre espace »
+   --------------------------------------------------------------------------- */
+.sm__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background-color: rgba(33, 20, 8, 0.55);
+  backdrop-filter: blur(4px);
+  animation: sm-fade 0.18s ease-out;
+  overflow-y: auto;
+}
+
+.sm__panel {
+  position: relative;
+  width: 100%;
+  max-width: 30rem;
+  padding: 2rem 1.9rem;
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  box-shadow: 0 30px 70px -30px rgba(60, 36, 14, 0.6);
+  animation: sm-rise 0.22s ease-out both;
+}
+
+/* Étape « choix de l'espace » : panneau élargi pour la grille 3 colonnes */
+.sm__panel--wide {
+  max-width: 44rem;
+}
+
+.sm__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: grid;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border: none;
+  border-radius: 0.6rem;
+  background-color: transparent;
+  color: var(--muted-foreground);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.sm__close:hover {
+  background-color: var(--muted);
+  color: var(--foreground);
+}
+
+.sm__close svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+/* --- En-têtes ------------------------------------------------------------ */
+.sm__title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.sm__subtitle {
+  margin-top: 0.4rem;
+  margin-bottom: 1.5rem;
+  color: var(--muted-foreground);
+  font-size: 0.95rem;
+}
+
+/* --- Liste des espaces (grille 3 colonnes) ------------------------------- */
+.sm__list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.7rem;
+}
+
+/* Cartes verticales et compactes pour tenir à trois par ligne */
+.sm__list .sm__space {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.55rem;
+  height: 100%;
+  padding: 0.85rem 0.9rem;
+}
+
+/* Le chevron n'a plus sa place dans la carte verticale */
+.sm__list .sm__space-chevron {
+  display: none;
+}
+
+/* Repli responsive : 2 colonnes puis 1 sur les petits écrans */
+@media (max-width: 34rem) {
+  .sm__list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 24rem) {
+  .sm__list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sm__space {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  padding: 0.9rem 1rem;
+  text-align: left;
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 0.85rem;
+  transition: transform 0.05s ease, border-color 0.15s ease,
+    box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.sm__space:hover {
+  border-color: color-mix(in srgb, var(--brand) 45%, var(--border));
+  box-shadow: var(--shadow-card);
+}
+
+.sm__space:active {
+  transform: translateY(1px);
+}
+
+.sm__space-icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 0.7rem;
+  background-color: var(--soft);
+  color: var(--brand);
+}
+
+.sm__space-icon svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.sm__space-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.sm__space-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.sm__space-desc {
+  font-size: 0.85rem;
+  color: var(--muted-foreground);
+}
+
+.sm__space-chevron {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--muted-foreground);
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.sm__space:hover .sm__space-chevron {
+  color: var(--brand);
+  transform: translateX(2px);
+}
+
+/* --- Séparateur « OU » --------------------------------------------------- */
+.sm__divider {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin: 1.25rem 0;
+  color: var(--muted-foreground);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+}
+
+.sm__divider::before,
+.sm__divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: var(--border);
+}
+
+/* --- Carte administrateur central --------------------------------------- */
+.sm__space--admin {
+  border-color: transparent;
+  color: #f3e7d8;
+  background-image: radial-gradient(
+      120% 140% at 90% 15%,
+      rgba(168, 92, 31, 0.5),
+      transparent 60%
+    ),
+    linear-gradient(135deg, var(--brown-dark-1), var(--brown-dark-2));
+}
+
+.sm__space--admin:hover {
+  box-shadow: 0 16px 32px -16px rgba(42, 26, 15, 0.8);
+}
+
+.sm__space--admin .sm__space-icon {
+  background-image: linear-gradient(150deg, var(--brand-light), var(--brand));
+  color: #fff;
+}
+
+.sm__space--admin .sm__space-title {
+  color: #fff;
+}
+
+.sm__space--admin .sm__space-desc {
+  color: #d8c7b5;
+}
+
+.sm__space--admin .sm__space-chevron {
+  color: #d8c7b5;
+}
+
+.sm__space--admin:hover .sm__space-chevron {
+  color: #fff;
+}
+
+/* --- Étape 2 : retour ---------------------------------------------------- */
+.sm__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1.1rem;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--muted-foreground);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: color 0.15s ease;
+}
+
+.sm__back:hover {
+  color: var(--brand);
+}
+
+.sm__back svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+/* --- Formulaire de connexion -------------------------------------------- */
+.sm__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.sm__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.sm__label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.sm__label-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.sm__forgot {
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--brand);
+}
+
+.sm__forgot:hover {
+  text-decoration: underline;
+}
+
+.sm__input {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0 0.85rem;
+  background-color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.sm__input:focus-within {
+  background-color: var(--card);
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 18%, transparent);
+}
+
+.sm__input svg {
+  flex-shrink: 0;
+  width: 1.15rem;
+  height: 1.15rem;
+  color: var(--muted-foreground);
+}
+
+.sm__input input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.8rem 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  color: var(--foreground);
+}
+
+.sm__input input::placeholder {
+  color: var(--muted-foreground);
+}
+
+/* --- Case à cocher ------------------------------------------------------- */
+.sm__check {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  color: var(--foreground);
+  cursor: pointer;
+}
+
+.sm__check input {
+  width: 1.05rem;
+  height: 1.05rem;
+  accent-color: var(--brand);
+  cursor: pointer;
+}
+
+/* --- Bouton de connexion ------------------------------------------------- */
+.sm__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  margin-top: 0.3rem;
+  padding: 0.9rem 1.4rem;
+  border: none;
+  border-radius: 0.8rem;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  background-image: linear-gradient(180deg, var(--brand-light), var(--brand));
+  box-shadow: 0 14px 26px -14px rgba(139, 69, 19, 0.9);
+  transition: background-image 0.15s ease, transform 0.05s ease;
+}
+
+.sm__submit:hover {
+  background-image: linear-gradient(180deg, var(--brand), var(--brand-dark));
+}
+
+.sm__submit:active {
+  transform: translateY(1px);
+}
+
+.sm__submit svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+/* --- Pied sécurisé ------------------------------------------------------- */
+.sm__secure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  margin-top: 1.4rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted-foreground);
+  font-size: 0.82rem;
+}
+
+.sm__secure svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* --- Animations ---------------------------------------------------------- */
+@keyframes sm-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes sm-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sm__overlay,
+  .sm__panel {
+    animation: none;
+  }
+}
+
+/* --- Bouton afficher / masquer le mot de passe --------------------------- */
+.sm__eye {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  margin-right: -0.25rem;
+  border: none;
+  border-radius: 0.45rem;
+  background: transparent;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.sm__eye:hover {
+  color: var(--brand);
+  background-color: var(--muted);
+}
+
+/* prioritaire sur « .sm__input svg » pour suivre la couleur du bouton */
+.sm__eye svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  color: inherit;
+}
+
+/* --- Code de vérification ------------------------------------------------ */
+.sm__code {
+  letter-spacing: 0.4em;
+  font-weight: 700;
+}
+
+/* --- Indicateur d'étapes (flux « oublié ») ------------------------------- */
+.sm__steps {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 1.4rem;
+}
+
+.sm__step-dot {
+  height: 0.3rem;
+  flex: 1;
+  border-radius: 999px;
+  background-color: var(--border);
+  transition: background-color 0.2s ease;
+}
+
+.sm__step-dot.is-active {
+  background-image: linear-gradient(90deg, var(--brand-light), var(--brand));
+}
+
+/* --- Message d'erreur ---------------------------------------------------- */
+.sm__error {
+  margin-top: -0.3rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.6rem;
+  background-color: #fbe9e7;
+  border: 1px solid #f3c9c2;
+  color: #b3261e;
+  font-size: 0.85rem;
+}
+
+/* --- Lien « renvoyer / pas reçu » ---------------------------------------- */
+.sm__alt {
+  margin-top: 1.2rem;
+  text-align: center;
+  color: var(--muted-foreground);
+  font-size: 0.85rem;
+}
+
+/* --- Retour en pied de panneau ------------------------------------------- */
+.sm__back--footer {
+  margin-top: 1.3rem;
+  margin-bottom: 0;
+  width: 100%;
+  justify-content: center;
+}
+
+/* --- Écran de confirmation ----------------------------------------------- */
+.sm__done {
+  text-align: center;
+  padding-top: 0.5rem;
+}
+
+.sm__done .sm__title,
+.sm__done .sm__subtitle {
+  text-align: center;
+}
+
+.sm__done .sm__subtitle {
+  margin-inline: auto;
+  max-width: 22rem;
+}
+
+.sm__done-icon {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  margin: 0 auto 1.1rem;
+  border-radius: 50%;
+  color: #2f8f4e;
+  background-color: #e7f4ec;
+  animation: sm-pop 0.35s ease-out both;
+}
+
+@keyframes sm-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sm__done-icon {
+    animation: none;
+  }
+}

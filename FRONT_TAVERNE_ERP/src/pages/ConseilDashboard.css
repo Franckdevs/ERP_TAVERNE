@@ -1,0 +1,298 @@
+/* ===========================================================================
+   Conseil client — CRM & Clients
+   (réutilise la coquille « dash » d'AssistantDashboard.css ; ici, le spécifique)
+   --------------------------------------------------------------------------- */
+
+/* --- KPI : barre de progression, badges ---------------------------------- */
+.crm-progress {
+  margin-top: 0.7rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background-color: color-mix(in srgb, var(--brand) 14%, var(--muted));
+  overflow: hidden;
+}
+
+.crm-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background-image: linear-gradient(90deg, var(--brand-light), var(--brand));
+}
+
+.crm-badge {
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--brand);
+  background-color: var(--soft);
+}
+
+.crm-badge--up {
+  color: #2f8f4e;
+  background-color: color-mix(in srgb, #2f8f4e 15%, var(--card));
+}
+
+.crm-value--up {
+  color: #2f8f4e;
+}
+
+/* --- Barre d'outils : onglets + bouton ----------------------------------- */
+.crm-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.crm-tabs {
+  display: inline-flex;
+  gap: 0.5rem;
+}
+
+.crm-tab {
+  padding: 0.55rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--foreground);
+  background-color: var(--card);
+  transition: background-color 0.15s ease, color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.crm-tab:hover {
+  border-color: color-mix(in srgb, var(--brand) 40%, var(--border));
+}
+
+.crm-tab.is-active {
+  color: #fff;
+  border-color: transparent;
+  background-image: linear-gradient(180deg, var(--brand-light), var(--brand));
+  box-shadow: 0 10px 22px -14px rgba(139, 69, 19, 0.8);
+}
+
+/* --- Pipeline (kanban) --------------------------------------------------- */
+.pipeline {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(11rem, 1fr));
+  gap: 0.9rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.pl-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: 0.85rem;
+  border-radius: 0.9rem;
+  background-color: color-mix(in srgb, var(--k, var(--brand)) 6%, var(--card));
+  border: 1px solid var(--border);
+}
+
+.pl-col__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.pl-col__title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--foreground);
+}
+
+.pl-col__count {
+  display: grid;
+  place-items: center;
+  min-width: 1.4rem;
+  height: 1.4rem;
+  padding: 0 0.4rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--k, var(--brand));
+  background-color: color-mix(in srgb, var(--k, var(--brand)) 18%, var(--card));
+}
+
+.pl-col__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.pl-card {
+  padding: 0.75rem 0.8rem;
+  border-radius: 0.6rem;
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--k, var(--brand));
+  box-shadow: var(--shadow-card);
+  transition: transform 0.05s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.pl-card:hover {
+  transform: translateY(-2px);
+  border-left-color: var(--k, var(--brand));
+  box-shadow: 0 16px 30px -18px rgba(80, 48, 20, 0.55);
+}
+
+.pl-card__name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.pl-card__amount {
+  margin-top: 0.3rem;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--brand);
+}
+
+.pl-card__desc {
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  color: var(--muted-foreground);
+}
+
+/* --- Liste clients (table) ----------------------------------------------- */
+.crm-table-wrap {
+  padding: 0;
+  overflow-x: auto;
+}
+
+.crm-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.crm-table thead th {
+  padding: 0.85rem 1.1rem;
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  border-bottom: 1px solid var(--border);
+}
+
+.crm-table tbody td {
+  padding: 0.85rem 1.1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--foreground);
+}
+
+.crm-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.crm-table tbody tr:hover td {
+  background-color: color-mix(in srgb, var(--brand) 4%, var(--card));
+}
+
+.crm-num {
+  text-align: right;
+}
+
+.crm-client {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.crm-avatar {
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  flex-shrink: 0;
+  border-radius: 0.55rem;
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: var(--brand);
+  background-color: var(--soft);
+}
+
+.crm-client__name {
+  font-weight: 700;
+}
+
+.crm-email {
+  color: var(--muted-foreground);
+}
+
+.crm-ca {
+  font-weight: 800;
+}
+
+/* --- Demandes & réclamations --------------------------------------------- */
+.req__icon {
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  flex-shrink: 0;
+  border-radius: 0.6rem;
+}
+
+.req__icon svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.req__icon--reclamation {
+  color: #b5462f;
+  background-color: color-mix(in srgb, #d64545 14%, var(--card));
+}
+
+.req__icon--demande {
+  color: var(--brand);
+  background-color: var(--soft);
+}
+
+.req-tag {
+  flex-shrink: 0;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.req-tag--reclamation {
+  color: #b5462f;
+  background-color: color-mix(in srgb, #d64545 14%, var(--card));
+}
+
+.req-tag--demande {
+  color: var(--muted-foreground);
+  background-color: var(--muted);
+}
+
+/* --- Responsive ---------------------------------------------------------- */
+@media (max-width: 1100px) {
+  .pipeline {
+    grid-auto-columns: minmax(12rem, 1fr);
+    grid-template-columns: none;
+    grid-auto-flow: column;
+  }
+}
+
+@media (max-width: 560px) {
+  .crm-toolbar {
+    align-items: stretch;
+  }
+  .crm-tabs {
+    flex: 1;
+  }
+  .crm-tab {
+    flex: 1;
+  }
+}
