@@ -1,0 +1,250 @@
+/* ===========================================================================
+   Menu « Rappels » — bouton de badge + modale (rendue dans <body> via portail).
+   Préfixe `rpl-` pour éviter toute collision avec les sidebars hôtes.
+   Thème brun Taverne, indépendant du mode sombre des dashboards.
+   --------------------------------------------------------------------------- */
+
+/* Petit compteur dans le bouton de la sidebar (rappels à venir) */
+.rpl-badge {
+  margin-left: auto;
+  min-width: 1.35rem;
+  height: 1.35rem;
+  padding: 0 0.35rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  background: var(--brand, #8b4513);
+  border-radius: 999px;
+}
+
+/* --- Overlay + panneau --------------------------------------------------- */
+.rpl-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 6vh 1rem 1rem;
+  background: rgba(33, 20, 8, 0.55);
+  backdrop-filter: blur(2px);
+  animation: rpl-fade 0.16s ease;
+}
+
+.rpl-panel {
+  width: 100%;
+  max-width: 32rem;
+  max-height: 86vh;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  color: #211a14;
+  border: 1px solid #ece3d8;
+  border-radius: 1rem;
+  box-shadow: 0 30px 70px -30px rgba(80, 48, 20, 0.7);
+  overflow: hidden;
+  animation: rpl-pop 0.18s ease;
+  font-family: var(--font-sans, "Segoe UI", system-ui, sans-serif);
+}
+
+@keyframes rpl-fade {
+  from { opacity: 0; }
+}
+@keyframes rpl-pop {
+  from { opacity: 0; transform: translateY(-0.6rem) scale(0.98); }
+}
+
+/* --- En-tête ------------------------------------------------------------- */
+.rpl-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.1rem;
+  background: linear-gradient(135deg, #8b4513, #6e3610);
+  color: #fff;
+}
+.rpl-head__icon {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.7rem;
+  background: rgba(255, 255, 255, 0.16);
+}
+.rpl-head__icon svg { width: 1.2rem; height: 1.2rem; }
+.rpl-head__text { display: flex; flex-direction: column; }
+.rpl-head__title { font-size: 1.05rem; font-weight: 700; }
+.rpl-head__sub { font-size: 0.78rem; opacity: 0.85; }
+.rpl-close {
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 0.6rem;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+  transition: background 0.15s;
+}
+.rpl-close:hover { background: rgba(255, 255, 255, 0.28); }
+.rpl-close svg { width: 1.05rem; height: 1.05rem; }
+
+/* --- Formulaire ---------------------------------------------------------- */
+.rpl-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1rem 1.1rem;
+  border-bottom: 1px solid #f0e7db;
+  background: #fbf6ef;
+}
+.rpl-form__row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.rpl-field {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0 0.6rem;
+  background: #fff;
+  border: 1px solid #e6dccd;
+  border-radius: 0.6rem;
+}
+.rpl-field__icon { width: 1rem; height: 1rem; color: #8b4513; flex: none; }
+.rpl-field:focus-within { border-color: #8b4513; box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.15); }
+
+.rpl-input {
+  font: inherit;
+  color: inherit;
+  border: 1px solid #e6dccd;
+  background: #fff;
+  border-radius: 0.6rem;
+  padding: 0.55rem 0.7rem;
+  outline: none;
+}
+.rpl-input--titre { width: 100%; }
+.rpl-input--titre:focus { border-color: #8b4513; box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.15); }
+/* Champs date/heure : la bordure est portée par .rpl-field */
+.rpl-field .rpl-input { border: none; padding: 0.55rem 0; background: transparent; }
+.rpl-field .rpl-input:focus { box-shadow: none; }
+
+.rpl-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: auto;
+  padding: 0.55rem 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  background: #8b4513;
+  border: none;
+  border-radius: 0.6rem;
+  transition: background 0.15s;
+}
+.rpl-add:hover { background: #6e3610; }
+.rpl-add:disabled { opacity: 0.45; cursor: not-allowed; }
+.rpl-add svg { width: 1rem; height: 1rem; }
+
+/* --- Liste --------------------------------------------------------------- */
+.rpl-list {
+  padding: 0.6rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.rpl-empty {
+  padding: 1.6rem 1rem;
+  text-align: center;
+  color: #8a7f72;
+  font-size: 0.85rem;
+}
+
+.rpl-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid #efe7db;
+  border-radius: 0.7rem;
+  background: #fff;
+}
+.rpl-item.is-late { border-color: #e9c2bb; background: #fdf4f2; }
+.rpl-item.is-done { opacity: 0.6; }
+
+.rpl-check {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  border: 1.6px solid #c9b9a4;
+  border-radius: 0.45rem;
+  background: #fff;
+  color: #fff;
+  transition: background 0.15s, border-color 0.15s;
+}
+.rpl-item.is-done .rpl-check { background: #2f7d4f; border-color: #2f7d4f; }
+.rpl-check svg { width: 0.9rem; height: 0.9rem; }
+
+.rpl-item__text { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
+.rpl-item__titre {
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rpl-item.is-done .rpl-item__titre { text-decoration: line-through; }
+.rpl-item__when {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.76rem;
+  color: #6f655b;
+  flex-wrap: wrap;
+}
+.rpl-item__when svg { width: 0.85rem; height: 0.85rem; }
+.rpl-item__heure {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: 0.2rem;
+}
+.rpl-late {
+  margin-left: 0.2rem;
+  padding: 0.05rem 0.4rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #b3261e;
+  background: #fbe3df;
+  border-radius: 999px;
+}
+
+.rpl-del {
+  flex: none;
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 0.5rem;
+  color: #a48b72;
+  background: transparent;
+  transition: background 0.15s, color 0.15s;
+}
+.rpl-del:hover { background: #fbe3df; color: #b3261e; }
+.rpl-del svg { width: 1rem; height: 1rem; }
+
+@media (max-width: 420px) {
+  .rpl-form__row { flex-direction: column; align-items: stretch; }
+  .rpl-add { margin-left: 0; justify-content: center; }
+}

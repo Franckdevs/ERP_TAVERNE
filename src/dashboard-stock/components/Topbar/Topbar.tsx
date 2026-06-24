@@ -1,5 +1,6 @@
 import "./Topbar.css";
-import { Search, Moon, Sun, Bell } from "../../../icons";
+import { Search, Moon, Sun } from "../../../icons";
+import AlertesMenu from "../../../alertes/AlertesMenu";
 import { USER } from "../../data";
 
 type Props = {
@@ -46,13 +47,7 @@ export default function Topbar({
         >
           {dark ? <Sun /> : <Moon />}
         </button>
-        <button
-          type="button"
-          className="stk-tb__icon-btn stk-tb__icon-btn--dot"
-          aria-label="Notifications"
-        >
-          <Bell />
-        </button>
+        <AlertesMenu scope="stock" className="stk-tb__icon-btn" variant="icon" />
         <span className="stk-tb__avatar">{USER.initiales}</span>
       </div>
     </header>

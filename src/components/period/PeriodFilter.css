@@ -1,0 +1,70 @@
+/* PeriodFilter — filtre Mois/Jour réutilisable.
+   Couleurs en currentColor → s'adapte aux en-têtes clairs et sombres. */
+.pf {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.pf__lead {
+  display: inline-flex;
+  align-items: center;
+  opacity: 0.7;
+}
+
+.pf__field {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.pf__select {
+  appearance: none;
+  -webkit-appearance: none;
+  font: inherit;
+  font-size: 0.82em;
+  font-weight: 600;
+  color: inherit;
+  line-height: 1.2;
+  padding: 0.34rem 1.5rem 0.34rem 0.6rem;
+  border-radius: 0.55rem;
+  border: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+  background: color-mix(in srgb, currentColor 7%, transparent);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.pf__select:hover:not(:disabled) {
+  border-color: color-mix(in srgb, currentColor 42%, transparent);
+}
+
+.pf__select:focus-visible {
+  outline: 2px solid color-mix(in srgb, currentColor 55%, transparent);
+  outline-offset: 1px;
+}
+
+.pf__select:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Les options héritent rarement de la couleur du parent : on force un rendu
+   lisible quel que soit le thème du navigateur. */
+.pf__select option {
+  color: #2b2118;
+  background: #fff;
+}
+
+.pf__chevron {
+  position: absolute;
+  right: 0.5rem;
+  font-size: 0.7em;
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+.pf--sm .pf__select {
+  font-size: 0.78em;
+  padding: 0.26rem 1.4rem 0.26rem 0.5rem;
+}

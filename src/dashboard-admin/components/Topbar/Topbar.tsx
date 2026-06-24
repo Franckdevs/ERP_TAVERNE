@@ -1,5 +1,6 @@
 import "./Topbar.css";
-import { Search, Moon, Bell } from "../../../icons";
+import { Search, Moon } from "../../../icons";
+import AlertesMenu from "../../../alertes/AlertesMenu";
 
 export default function Topbar() {
   return (
@@ -22,9 +23,7 @@ export default function Topbar() {
         <button type="button" className="tb__icon-btn" aria-label="Thème">
           <Moon />
         </button>
-        <button type="button" className="tb__icon-btn tb__icon-btn--dot" aria-label="Notifications">
-          <Bell />
-        </button>
+        <AlertesMenu scope="admin" className="tb__icon-btn" variant="icon" />
         <span className="tb__avatar">AD</span>
       </div>
     </header>

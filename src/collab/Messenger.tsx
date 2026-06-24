@@ -2,7 +2,6 @@ import "./Messenger.css";
 import { useRef, useState } from "react";
 import {
   ArrowLeft,
-  Phone,
   Video,
   Paperclip,
   Image as ImageIcon,
@@ -14,10 +13,19 @@ import {
   X,
   CheckCheck,
   Search,
+  Maximize2,
+  Minimize2,
+  MessageSquare,
 } from "lucide-react";
 import { CONTACTS, SEED, type Contact, type Message, type MsgKind } from "./collabData";
 
-type Props = { onClose: () => void };
+type Props = {
+  onClose: () => void;
+  /** Affichage en page complète (deux volets) plutôt qu'en dock flottant. */
+  expanded?: boolean;
+  /** Bascule dock ↔ plein écran (masque le bouton si absent). */
+  onToggleExpand?: () => void;
+};
 
 const ATTACH: { kind: MsgKind; label: string; icon: typeof ImageIcon; payload: string }[] = [
   { kind: "image", label: "Photo", icon: ImageIcon, payload: "Photo" },
@@ -26,7 +34,7 @@ const ATTACH: { kind: MsgKind; label: string; icon: typeof ImageIcon; payload: s
   { kind: "document", label: "Document", icon: FileText, payload: "Document.pdf" },
 ];
 
-export default function Messenger({ onClose }: Props) {
+export default function Messenger({ onClose, expanded = false, onToggleExpand }: Props) {
   const [threads, setThreads] = useState<Record<string, Message[]>>(SEED);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
@@ -61,167 +69,215 @@ export default function Messenger({ onClose }: Props) {
     scrollDown();
   };
 
-  return (
-    <div className="msg" role="dialog" aria-label="Messagerie">
-      {/* ----- Liste des discussions ----- */}
-      {!active ? (
-        <>
-          <header className="msg__head">
-            <h2 className="msg__head-title">Messagerie</h2>
-            <button type="button" className="msg__icon" onClick={onClose} aria-label="Fermer">
+  /* Boutons de droite des en-têtes : plein écran / réduire + fermer */
+  const headActions = (
+    <span className="msg__head-actions">
+      {onToggleExpand && (
+        <button
+          type="button"
+          className="msg__icon"
+          onClick={onToggleExpand}
+          aria-label={expanded ? "Réduire la fenêtre" : "Afficher en page complète"}
+          title={expanded ? "Réduire" : "Page complète"}
+        >
+          {expanded ? <Minimize2 /> : <Maximize2 />}
+        </button>
+      )}
+      <button type="button" className="msg__icon" onClick={onClose} aria-label="Fermer">
+        <X />
+      </button>
+    </span>
+  );
+
+  /* ----- Volet « liste des discussions » ----- */
+  const listView = (
+    <>
+      <header className="msg__head">
+        <h2 className="msg__head-title">Messagerie</h2>
+        {headActions}
+      </header>
+
+      <div className="msg__search">
+        <Search />
+        <input type="search" placeholder="Rechercher une discussion…" aria-label="Rechercher" />
+      </div>
+
+      <ul className="msg__threads">
+        {CONTACTS.map((c) => {
+          const msgs = threads[c.id] ?? [];
+          const last = msgs[msgs.length - 1];
+          return (
+            <li key={c.id}>
+              <button
+                type="button"
+                className={`thread${c.id === activeId ? " is-active" : ""}`}
+                onClick={() => openThread(c)}
+              >
+                <span className="avatar" style={{ backgroundColor: c.color }}>
+                  {c.initials}
+                  {c.online && <span className="avatar__dot" />}
+                </span>
+                <span className="thread__body">
+                  <span className="thread__top">
+                    <span className="thread__name">{c.name}</span>
+                    <span className="thread__time">{last?.time ?? ""}</span>
+                  </span>
+                  <span className="thread__bottom">
+                    <span className="thread__preview">{previewOf(last)}</span>
+                    {c.unread > 0 && <span className="thread__badge">{c.unread}</span>}
+                  </span>
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </>
+  );
+
+  /* ----- Volet « conversation » ----- */
+  const conversationView = active && (
+    <>
+      <header className="msg__head msg__head--chat">
+        <button
+          type="button"
+          className="msg__icon msg__back"
+          onClick={() => setActiveId(null)}
+          aria-label="Retour"
+        >
+          <ArrowLeft />
+        </button>
+        <span className="avatar avatar--sm" style={{ backgroundColor: active.color }}>
+          {active.initials}
+        </span>
+        <span className="msg__peer">
+          <span className="msg__peer-name">{active.name}</span>
+          <span className="msg__peer-status">
+            {active.online ? "en ligne" : "vu récemment"}
+          </span>
+        </span>
+        {!expanded && headActions}
+      </header>
+
+      <div className="msg__stream">
+        {(threads[active.id] ?? []).map((m) => (
+          <Bubble key={m.id} m={m} />
+        ))}
+        <div ref={listEnd} />
+      </div>
+
+      {/* ----- Zone de saisie ----- */}
+      <div className="composer">
+        {attachOpen && (
+          <div className="composer__attach">
+            {ATTACH.map((a) => (
+              <button
+                key={a.label}
+                type="button"
+                className="attach-opt"
+                onClick={() => {
+                  push(a.kind, a.payload);
+                  setAttachOpen(false);
+                }}
+              >
+                <span className="attach-opt__icon"><a.icon /></span>
+                {a.label}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {recording ? (
+          <div className="composer__rec">
+            <span className="composer__rec-dot" />
+            <span className="composer__rec-time">Enregistrement…</span>
+            <button
+              type="button"
+              className="composer__btn composer__btn--cancel"
+              onClick={() => setRecording(false)}
+              aria-label="Annuler"
+            >
               <X />
             </button>
-          </header>
-
-          <div className="msg__search">
-            <Search />
-            <input type="search" placeholder="Rechercher une discussion…" aria-label="Rechercher" />
-          </div>
-
-          <ul className="msg__threads">
-            {CONTACTS.map((c) => {
-              const msgs = threads[c.id] ?? [];
-              const last = msgs[msgs.length - 1];
-              return (
-                <li key={c.id}>
-                  <button type="button" className="thread" onClick={() => openThread(c)}>
-                    <span className="avatar" style={{ backgroundColor: c.color }}>
-                      {c.initials}
-                      {c.online && <span className="avatar__dot" />}
-                    </span>
-                    <span className="thread__body">
-                      <span className="thread__top">
-                        <span className="thread__name">{c.name}</span>
-                        <span className="thread__time">{last?.time ?? ""}</span>
-                      </span>
-                      <span className="thread__bottom">
-                        <span className="thread__preview">{previewOf(last)}</span>
-                        {c.unread > 0 && <span className="thread__badge">{c.unread}</span>}
-                      </span>
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </>
-      ) : (
-        /* ----- Conversation ----- */
-        <>
-          <header className="msg__head msg__head--chat">
-            <button type="button" className="msg__icon" onClick={() => setActiveId(null)} aria-label="Retour">
-              <ArrowLeft />
+            <button
+              type="button"
+              className="composer__btn composer__btn--send"
+              onClick={() => {
+                push("voice", "0:08");
+                setRecording(false);
+              }}
+              aria-label="Envoyer le vocal"
+            >
+              <Send />
             </button>
-            <span className="avatar avatar--sm" style={{ backgroundColor: active.color }}>
-              {active.initials}
-            </span>
-            <span className="msg__peer">
-              <span className="msg__peer-name">{active.name}</span>
-              <span className="msg__peer-status">
-                {active.online ? "en ligne" : "vu récemment"}
-              </span>
-            </span>
-            <span className="msg__head-actions">
-              <button type="button" className="msg__icon" aria-label="Appel"><Phone /></button>
-              <button type="button" className="msg__icon" aria-label="Appel vidéo"><Video /></button>
-            </span>
-          </header>
-
-          <div className="msg__stream">
-            {(threads[active.id] ?? []).map((m) => (
-              <Bubble key={m.id} m={m} />
-            ))}
-            <div ref={listEnd} />
           </div>
-
-          {/* ----- Zone de saisie ----- */}
-          <div className="composer">
-            {attachOpen && (
-              <div className="composer__attach">
-                {ATTACH.map((a) => (
-                  <button
-                    key={a.label}
-                    type="button"
-                    className="attach-opt"
-                    onClick={() => {
-                      push(a.kind, a.payload);
-                      setAttachOpen(false);
-                    }}
-                  >
-                    <span className="attach-opt__icon"><a.icon /></span>
-                    {a.label}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {recording ? (
-              <div className="composer__rec">
-                <span className="composer__rec-dot" />
-                <span className="composer__rec-time">Enregistrement…</span>
-                <button
-                  type="button"
-                  className="composer__btn composer__btn--cancel"
-                  onClick={() => setRecording(false)}
-                  aria-label="Annuler"
-                >
-                  <X />
-                </button>
-                <button
-                  type="button"
-                  className="composer__btn composer__btn--send"
-                  onClick={() => {
-                    push("voice", "0:08");
-                    setRecording(false);
-                  }}
-                  aria-label="Envoyer le vocal"
-                >
-                  <Send />
-                </button>
-              </div>
+        ) : (
+          <div className="composer__row">
+            <button
+              type="button"
+              className={`composer__btn ${attachOpen ? "is-active" : ""}`}
+              onClick={() => setAttachOpen((o) => !o)}
+              aria-label="Joindre un fichier"
+            >
+              <Paperclip />
+            </button>
+            <input
+              className="composer__input"
+              placeholder="Écrivez un message…"
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") sendText();
+              }}
+            />
+            {draft.trim() ? (
+              <button
+                type="button"
+                className="composer__btn composer__btn--send"
+                onClick={sendText}
+                aria-label="Envoyer"
+              >
+                <Send />
+              </button>
             ) : (
-              <div className="composer__row">
-                <button
-                  type="button"
-                  className={`composer__btn ${attachOpen ? "is-active" : ""}`}
-                  onClick={() => setAttachOpen((o) => !o)}
-                  aria-label="Joindre un fichier"
-                >
-                  <Paperclip />
-                </button>
-                <input
-                  className="composer__input"
-                  placeholder="Écrivez un message…"
-                  value={draft}
-                  onChange={(e) => setDraft(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") sendText();
-                  }}
-                />
-                {draft.trim() ? (
-                  <button
-                    type="button"
-                    className="composer__btn composer__btn--send"
-                    onClick={sendText}
-                    aria-label="Envoyer"
-                  >
-                    <Send />
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    className="composer__btn composer__btn--mic"
-                    onClick={() => setRecording(true)}
-                    aria-label="Message vocal"
-                  >
-                    <Mic />
-                  </button>
-                )}
-              </div>
+              <button
+                type="button"
+                className="composer__btn composer__btn--mic"
+                onClick={() => setRecording(true)}
+                aria-label="Message vocal"
+              >
+                <Mic />
+              </button>
             )}
           </div>
-        </>
-      )}
+        )}
+      </div>
+    </>
+  );
+
+  /* État vide du volet conversation (page complète, aucune discussion choisie) */
+  const emptyChat = (
+    <div className="msg__empty">
+      <span className="msg__empty-icon"><MessageSquare /></span>
+      <p className="msg__empty-title">Vos messages</p>
+      <p className="msg__empty-text">Sélectionnez une discussion pour l'afficher ici.</p>
+    </div>
+  );
+
+  /* ----- Page complète : deux volets côte à côte ----- */
+  if (expanded) {
+    return (
+      <div className={`msg msg--full${active ? " has-active" : ""}`} role="dialog" aria-label="Messagerie">
+        <aside className="msg__pane msg__pane--list">{listView}</aside>
+        <section className="msg__pane msg__pane--chat">{active ? conversationView : emptyChat}</section>
+      </div>
+    );
+  }
+
+  /* ----- Dock flottant : un seul volet à la fois ----- */
+  return (
+    <div className="msg" role="dialog" aria-label="Messagerie">
+      {active ? conversationView : listView}
     </div>
   );
 }

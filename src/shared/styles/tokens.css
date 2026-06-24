@@ -1,0 +1,38 @@
+/* ===========================================================================
+   Design tokens du Design System (complète globals.css).
+   Échelles partagées par les primitives shared/ui/*. Marque brun Taverne.
+   --------------------------------------------------------------------------- */
+:root {
+  /* Espacements (échelle 4px) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+
+  /* Rayons */
+  --radius-sm: 0.4rem;
+  --radius-md: 0.6rem;
+  --radius-lg: 0.85rem;
+  --radius-pill: 999px;
+
+  /* Élévations */
+  --elev-1: 0 1px 2px rgba(80, 48, 20, 0.08);
+  --elev-2: 0 8px 24px -12px rgba(80, 48, 20, 0.35);
+  --elev-3: 0 30px 70px -30px rgba(80, 48, 20, 0.6);
+
+  /* Couleurs sémantiques (alignées sur la palette brun + statuts) */
+  --c-brand: #8b4513;
+  --c-brand-hover: #6e3610;
+  --c-success: #2f7d4f;
+  --c-warning: #b5760f;
+  --c-danger: #b3261e;
+  --c-danger-soft: #fbe3df;
+
+  /* Z-index (échelle unique → fini les conflits) */
+  --z-dropdown: 800;
+  --z-dock: 1000;
+  --z-modal: 1200;
+  --z-toast: 1400;
+}

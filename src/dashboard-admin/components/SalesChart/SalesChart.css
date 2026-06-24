@@ -14,6 +14,15 @@
   color: var(--muted-foreground);
 }
 
+/* --- Contrôles de l'en-tête (filtre période + année) --------------------- */
+.chart-card__controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
 /* --- Sélecteur d'année --------------------------------------------------- */
 .seg {
   display: inline-flex;

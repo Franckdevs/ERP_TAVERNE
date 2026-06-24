@@ -7,7 +7,16 @@ import type {
 } from "react";
 import "./AssistantDashboard.css"; // coquille « dash » partagée
 import "./PersonnelDashboard.css"; // styles propres aux RH
-import { BellIcon, HouseIcon, XIcon } from "../components/icons";
+import { HouseIcon, XIcon } from "../components/icons";
+import AlertesMenu from "../alertes/AlertesMenu";
+import PeriodFilter from "../components/period/PeriodFilter";
+import {
+  periodFactor,
+  periodLabel,
+  EMPTY_PERIOD,
+  type Period,
+} from "../components/period/periodSeries";
+import RappelsMenu from "../rappels/RappelsMenu";
 
 /* --------------------------------------------------------------------------
    Icônes locales (au trait, basées sur currentColor)
@@ -271,6 +280,7 @@ export default function PersonnelDashboard({
   const [leaves, setLeaves] = useState<Leave[]>(SEED_LEAVES);
   const [deptFilter, setDeptFilter] = useState("Tous");
   const [modalOpen, setModalOpen] = useState(false);
+  const [contractPeriod, setContractPeriod] = useState<Period>(EMPTY_PERIOD);
 
   const meta = VIEW_META[view];
 
@@ -341,6 +351,11 @@ export default function PersonnelDashboard({
               ))}
             </div>
           ))}
+
+          <div className="dash__nav-group">
+            <p className="dash__nav-label">Outils</p>
+            <RappelsMenu scope="personnel" className="dash__nav-item" />
+          </div>
         </nav>
 
         <div className="dash__foot">
@@ -382,14 +397,7 @@ export default function PersonnelDashboard({
             >
               {dark ? <SunIcon /> : <MoonIcon />}
             </button>
-            <button
-              className="dash__icon-btn"
-              type="button"
-              aria-label="Notifications"
-            >
-              <BellIcon />
-              <span className="dash__dot" />
-            </button>
+            <AlertesMenu scope="personnel" className="dash__icon-btn" variant="icon" />
             <span className="dash__avatar">BS</span>
           </div>
         </header>
@@ -568,9 +576,21 @@ export default function PersonnelDashboard({
             <>
               <Panel
                 title="Répartition des contrats"
-                sub={`${employees.length} contrats actifs`}
+                sub={
+                  contractPeriod.month == null
+                    ? `${employees.length} contrats actifs`
+                    : `Contrats actifs · ${periodLabel(contractPeriod, 2026)}`
+                }
+                action={
+                  <PeriodFilter
+                    value={contractPeriod}
+                    onChange={setContractPeriod}
+                    year={2026}
+                    size="sm"
+                  />
+                }
               >
-                <ContractBars employees={employees} />
+                <ContractBars employees={employees} period={contractPeriod} />
               </Panel>
               <Panel title="Détail des contrats" sub="Par employé">
                 <EmployeeTable items={employees} variant="contracts" />
@@ -814,12 +834,23 @@ function LeaveList({
   );
 }
 
-function ContractBars({ employees }: { employees: Employee[] }) {
-  const total = employees.length || 1;
+function ContractBars({
+  employees,
+  period,
+}: {
+  employees: Employee[];
+  period: Period;
+}) {
+  /* effectif par type de contrat, repondéré selon le mois / jour choisi */
+  const counts = CONTRACTS.map((c, i) => {
+    const base = employees.filter((e) => e.contract === c).length;
+    return Math.max(0, Math.round(base * periodFactor(i, period)));
+  });
+  const total = counts.reduce((s, n) => s + n, 0) || 1;
   return (
     <ul className="rh-bars">
-      {CONTRACTS.map((c) => {
-        const n = employees.filter((e) => e.contract === c).length;
+      {CONTRACTS.map((c, i) => {
+        const n = counts[i];
         const pct = Math.round((n / total) * 100);
         return (
           <li className="rh-bar" key={c}>

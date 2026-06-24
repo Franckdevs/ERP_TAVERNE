@@ -6,7 +6,7 @@ import {
   FilePlus2,
   FileText,
   ShoppingCart,
-  DollarSign,
+  Fcfa,
   LayoutDashboard,
   CreditCard,
   Calendar,
@@ -35,7 +35,7 @@ export const STATS: Stat[] = [
   { icon: FilePlus2, label: "Factures en attente", value: "8 450 000", unit: "FCFA", badge: "23 factures", tone: "neutral" },
   { icon: FileText, label: "Devis envoyés", value: "31", badge: "+6", tone: "up" },
   { icon: ShoppingCart, label: "Commandes en cours", value: "19", badge: "+2", tone: "up" },
-  { icon: DollarSign, label: "Dépenses · mois", value: "22 300 000", unit: "FCFA", badge: "+4,1 %", tone: "up" },
+  { icon: Fcfa, label: "Dépenses · mois", value: "22 300 000", unit: "FCFA", badge: "+4,1 %", tone: "up" },
 ];
 
 /* --- Navigation de la sidebar ------------------------------------------- */

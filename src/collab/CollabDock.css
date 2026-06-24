@@ -16,6 +16,18 @@
   animation: dock-rise 0.2s ease-out both;
 }
 
+/* Messagerie en page complète (occupe tout l'écran, par-dessus le dock) */
+.dock__full {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  padding: clamp(0.5rem, 2.5vw, 2rem);
+  display: grid;
+  background: rgba(28, 17, 8, 0.45);
+  backdrop-filter: blur(2px);
+  animation: dock-rise 0.2s ease-out both;
+}
+
 @keyframes dock-rise {
   from {
     opacity: 0;

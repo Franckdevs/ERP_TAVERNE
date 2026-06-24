@@ -10,6 +10,7 @@ import {
   formatFCFA,
 } from "../data";
 import { Donut } from "../charts";
+import { periodFactor, daysInMonth } from "../../components/period/periodSeries";
 import { DownloadIcon, ChevronDownIcon } from "../icons";
 
 /* Répartition fictive d'une catégorie sur ses sous-catégories (déterministe) */
@@ -27,7 +28,8 @@ function splitSousCategories(slug: string, montant: number, operations: number) 
 }
 
 export default function RepartitionView() {
-  const [mois] = useState(MOIS_COURANT);
+  const [mois, setMois] = useState(MOIS_COURANT);
+  const [jour, setJour] = useState<number | null>(null);
   const [actifs, setActifs] = useState<Set<string>>(new Set());
   const [ouvert, setOuvert] = useState<string | null>(null);
   const [flash, setFlash] = useState("");
@@ -47,8 +49,18 @@ export default function RepartitionView() {
         : REPARTITION_JUIN.filter((r) => actifs.has(r.slug)),
     [actifs]
   );
-  const total = lignes.reduce((s, r) => s + r.montant, 0);
-  const operations = lignes.reduce((s, r) => s + r.operations, 0);
+  /* repondération selon mois/jour (Juin sans jour ciblé = données de référence) */
+  const facteur = (i: number) =>
+    mois === MOIS_COURANT && jour == null
+      ? 1
+      : periodFactor(i, { month: mois - 1, day: jour });
+  const lignesP = lignes.map((r, i) => ({
+    ...r,
+    montant: Math.max(1, Math.round(r.montant * facteur(i))),
+  }));
+
+  const total = lignesP.reduce((s, r) => s + r.montant, 0);
+  const operations = lignesP.reduce((s, r) => s + r.operations, 0);
 
   const showExport = () => {
     setFlash("Export .xlsx multi-feuilles généré (démo).");
@@ -63,9 +75,27 @@ export default function RepartitionView() {
         <div className="cc-toolbar__selects">
           <label className="cc-mini-field">
             <span>Mois</span>
-            <select defaultValue={mois}>
+            <select
+              value={mois}
+              onChange={(e) => {
+                setMois(Number(e.target.value));
+                setJour(null);
+              }}
+            >
               {MOIS_LONG.map((m, i) => (
                 <option key={m} value={i + 1}>{m}</option>
+              ))}
+            </select>
+          </label>
+          <label className="cc-mini-field">
+            <span>Jour</span>
+            <select
+              value={jour ?? ""}
+              onChange={(e) => setJour(e.target.value === "" ? null : Number(e.target.value))}
+            >
+              <option value="">Tous</option>
+              {Array.from({ length: daysInMonth(ANNEE_COURANTE, mois - 1) }, (_, i) => i + 1).map((d) => (
+                <option key={d} value={d}>{d}</option>
               ))}
             </select>
           </label>
@@ -121,18 +151,20 @@ export default function RepartitionView() {
         <header className="cc-panel__head">
           <div>
             <h2 className="cc-panel__title cc-panel__title--sm">Répartition par catégorie</h2>
-            <p className="cc-panel__sub">{MOIS_LONG[mois - 1]} {ANNEE_COURANTE}</p>
+            <p className="cc-panel__sub">
+              {jour ? `${jour} ` : ""}{MOIS_LONG[mois - 1]} {ANNEE_COURANTE}
+            </p>
           </div>
         </header>
 
         <div className="cc-repart">
           <div className="cc-repart__donut">
-            <Donut data={lignes.map((r) => ({ value: r.montant, color: r.couleur }))} />
+            <Donut data={lignesP.map((r) => ({ value: r.montant, color: r.couleur }))} />
             <p className="cc-repart__center">{formatNombre(total / 1000)}k<br /><small>FCFA</small></p>
           </div>
 
           <ul className="cc-repart__list">
-            {lignes.map((r) => {
+            {lignesP.map((r) => {
               const pct = (r.montant / (total || 1)) * 100;
               const isOpen = ouvert === r.slug;
               const subs = splitSousCategories(r.slug, r.montant, r.operations);

@@ -16,6 +16,7 @@ export {
   User,
   Users,
   Package,
+  Briefcase,
   // Gestion de stock
   Boxes,
   Coins,
@@ -33,16 +34,24 @@ export {
   Bell,
   Moon,
   Sun,
+  // Rappels (menu commun à tous les espaces)
+  AlarmClock,
+  CalendarClock,
+  Clock,
+  Check,
+  Trash2,
   // Indicateurs / stats
   Wallet,
   Activity,
   FilePlus2,
   FileText,
   ShoppingCart,
-  DollarSign,
   TrendingUp,
   TrendingDown,
   ShieldCheck,
 } from "lucide-react";
+
+// Icône monnaie maison (FCFA) — remplace le symbole dollar partout.
+export { Fcfa } from "./Fcfa";
 
 export type { LucideIcon } from "lucide-react";

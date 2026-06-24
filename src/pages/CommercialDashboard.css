@@ -1,0 +1,348 @@
+/* ===========================================================================
+   Chargé commercial — tableau de bord
+   (réutilise la coquille « dash » d'AssistantDashboard.css et les utilitaires
+   crm-* de ConseilDashboard.css ; ici, le spécifique.)
+   --------------------------------------------------------------------------- */
+
+/* Pastille d'en-tête de panneau */
+.com-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--brand);
+  background-color: var(--soft);
+  white-space: nowrap;
+}
+.com-pill svg {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+/* Référence de devis (mono, discrète) */
+.com-ref {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--brand);
+}
+
+/* --- Objectifs commerciaux ----------------------------------------------- */
+.com-objs {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+.com-obj__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.1rem;
+}
+.com-obj__label {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.com-obj__val {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+}
+.com-obj__val strong {
+  color: var(--foreground);
+}
+
+/* --- Classement « Top clients » ------------------------------------------ */
+.com-rank {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+}
+.com-rank__row {
+  display: grid;
+  grid-template-columns: 1.6rem 1fr;
+  align-items: center;
+  gap: 0.7rem;
+}
+.com-rank__num {
+  display: grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--brand);
+  background-color: var(--soft);
+}
+.com-rank__body {
+  min-width: 0;
+}
+.com-rank__line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.86rem;
+}
+.com-rank__name {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.com-rank__ca {
+  font-weight: 800;
+  color: var(--foreground);
+  white-space: nowrap;
+}
+.com-rank__bar {
+  display: block;
+  margin-top: 0.35rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background-color: color-mix(in srgb, var(--brand) 14%, var(--muted));
+  overflow: hidden;
+}
+.com-rank__fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background-image: linear-gradient(90deg, var(--brand-light), var(--brand));
+}
+
+/* Le premier du classement se démarque */
+.com-rank__row:first-child .com-rank__num {
+  color: #fff;
+  background-image: linear-gradient(150deg, var(--brand-light), var(--brand-dark));
+}
+
+/* --- Sous-stats contextuels (vues secondaires) --------------------------- */
+.com-substats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.com-substat {
+  flex: 1 1 11rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.85rem 1rem;
+}
+.com-substat__label {
+  font-size: 0.76rem;
+  color: var(--muted-foreground);
+}
+.com-substat__value {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-top: 0.15rem;
+}
+.com-substat__value small {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+}
+
+/* --- Barre de filtres (pills) -------------------------------------------- */
+.com-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.com-filter {
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  cursor: pointer;
+}
+.com-filter:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+.com-filter.is-active {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}
+
+/* --- Pipeline (kanban) --------------------------------------------------- */
+.com-pipe {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+.com-pipe__col {
+  flex: 0 0 15rem;
+  background: var(--muted);
+  border-radius: var(--radius);
+  padding: 0.75rem;
+}
+.com-pipe__col-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+.com-pipe__col-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+.com-pipe__dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+}
+.com-pipe__count {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--muted-foreground);
+  background: var(--card);
+  border-radius: 999px;
+  padding: 0.05rem 0.45rem;
+}
+.com-pipe__card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--brand);
+  border-radius: 0.6rem;
+  padding: 0.6rem 0.7rem;
+  margin-bottom: 0.5rem;
+}
+.com-pipe__card:last-child {
+  margin-bottom: 0;
+}
+.com-pipe__client {
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.com-pipe__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.35rem;
+  font-size: 0.76rem;
+  color: var(--muted-foreground);
+}
+.com-pipe__amount {
+  font-weight: 800;
+  color: var(--brand);
+}
+.com-pipe__empty {
+  font-size: 0.76rem;
+  color: var(--muted-foreground);
+  padding: 0.5rem;
+  text-align: center;
+}
+
+/* --- Étiquette type client ----------------------------------------------- */
+.com-tag {
+  display: inline-flex;
+  padding: 0.12rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.com-tag--client {
+  color: #2f7d4f;
+  background: #e3f3ea;
+}
+.com-tag--prospect {
+  color: #b5760f;
+  background: #fbeede;
+}
+
+/* --- Priorité (relances) ------------------------------------------------- */
+.com-prio {
+  display: inline-flex;
+  padding: 0.12rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.com-prio--haute {
+  color: #b3261e;
+  background: #fbe3df;
+}
+.com-prio--moyenne {
+  color: #b5760f;
+  background: #fbeede;
+}
+.com-prio--basse {
+  color: #1d68b3;
+  background: #e1edfb;
+}
+
+/* --- Liste des relances (avec action) ------------------------------------ */
+.com-relance {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.com-relance:last-child {
+  border-bottom: none;
+}
+.com-relance.is-done {
+  opacity: 0.5;
+}
+.com-relance__body {
+  flex: 1;
+  min-width: 0;
+}
+.com-relance__client {
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+.com-relance.is-done .com-relance__client {
+  text-decoration: line-through;
+}
+.com-relance__raison {
+  font-size: 0.78rem;
+  color: var(--muted-foreground);
+}
+.com-relance__ech {
+  font-size: 0.74rem;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+}
+.com-relance__btn {
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 0.5rem;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  white-space: nowrap;
+  color: inherit;
+}
+.com-relance__btn:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+.com-relance__btn svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}

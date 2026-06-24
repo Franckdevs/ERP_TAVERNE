@@ -7,6 +7,7 @@ export type ComptaView =
   | "projets"
   | "postes"
   | "recap"
-  | "repartition";
+  | "repartition"
+  | "parametres";
 
 export type Navigate = (view: ComptaView) => void;

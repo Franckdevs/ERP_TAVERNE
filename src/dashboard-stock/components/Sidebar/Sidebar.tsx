@@ -1,6 +1,7 @@
 import "./Sidebar.css";
 import { House, LogOut } from "../../../icons";
 import { NAV, USER, type ViewId } from "../../data";
+import RappelsMenu from "../../../rappels/RappelsMenu";
 
 type Props = {
   active: ViewId;
@@ -34,6 +35,12 @@ export default function Sidebar({ active, onNavigate, onLogout }: Props) {
             <span>{label}</span>
           </button>
         ))}
+
+        <RappelsMenu
+          scope="stock"
+          className="stk-sb__item"
+          iconClassName="stk-sb__item-icon"
+        />
       </nav>
 
       <div className="stk-sb__footer">

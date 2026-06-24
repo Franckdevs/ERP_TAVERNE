@@ -6,6 +6,7 @@ import {
   ArrowRightIcon,
   BellIcon,
   BoxIcon,
+  BriefcaseIcon,
   CalendarIcon,
   CheckIcon,
   ClockIcon,
@@ -17,12 +18,9 @@ import {
   ListChecksIcon,
   LockIcon,
   MessageIcon,
-  QuoteIcon,
   RefreshIcon,
   ShieldIcon,
-  StarIcon,
   TrendingUpIcon,
-  TrophyIcon,
   UserIcon,
   UsersIcon,
   ZapIcon,
@@ -60,6 +58,11 @@ const apps = [
     desc: "Prospects, pipeline et suivi commercial.",
   },
   {
+    icon: BriefcaseIcon,
+    title: "Chargé commercial",
+    desc: "Ventes, objectifs, devis et relances.",
+  },
+  {
     icon: BoxIcon,
     title: "Gestion de stock",
     desc: "Inventaire, alertes et approvisionnement.",
@@ -80,7 +83,7 @@ const advantages = [
   {
     icon: EyeIcon,
     title: "Supervision centrale",
-    desc: "La direction dispose d'un tableau de bord consolidé qui réunit les données des cinq applications en temps réel.",
+    desc: "La direction dispose d'un tableau de bord consolidé qui réunit les données des six applications en temps réel.",
   },
   {
     icon: GlobeIcon,
@@ -124,7 +127,7 @@ const collab = [
   {
     icon: RefreshIcon,
     title: "Données synchronisées",
-    desc: "Une seule source de vérité partagée entre les cinq applications, toujours à jour.",
+    desc: "Une seule source de vérité partagée entre les six applications, toujours à jour.",
   },
 ];
 
@@ -143,7 +146,7 @@ const steps = [
   {
     num: "03",
     title: "La direction supervise l'ensemble",
-    desc: "Un tableau de bord consolidé réunit l'activité des cinq métiers et le suivi des tâches en direct.",
+    desc: "Un tableau de bord consolidé réunit l'activité des six métiers et le suivi des tâches en direct.",
   },
 ];
 
@@ -198,12 +201,6 @@ export default function HomePage() {
                 <br />
                 <span>suivez tout en temps réel.</span>
               </h1>
-              <p className="hero__subtitle">
-                Taverne réunit vos cinq métiers sur une seule plateforme de
-                coopération : chaque équipe agit dans son espace, les tâches et
-                les actions se synchronisent à l'instant, et la direction garde
-                une vue d'ensemble en direct.
-              </p>
               <div className="hero__actions">
                 <button
                   className="btn btn--primary"
@@ -238,7 +235,7 @@ export default function HomePage() {
         <section className="section section--beige" id="applications">
           <div className="lp__container lp__container--wide">
             <div className="section__head">
-              <p className="eyebrow">Cinq applications, un seul système</p>
+              <p className="eyebrow">Six applications, un seul système</p>
               <h2 className="section__title">Chaque métier, son espace dédié</h2>
               <p className="section__subtitle">
                 Vos collaborateurs se connectent à leur application et
@@ -331,78 +328,6 @@ export default function HomePage() {
                 <p className="advantage__desc">{desc}</p>
               </article>
             ))}
-          </div>
-        </section>
-
-        {/* --- Employé du mois --- */}
-        <section className="section section--beige" id="equipe">
-          <div className="lp__container">
-            <div className="section__head">
-              <p className="eyebrow">Notre équipe</p>
-              <h2 className="section__title">Celles et ceux qui font Taverne</h2>
-              <p className="section__subtitle">
-                Chaque mois, nous mettons à l'honneur un collaborateur dont le
-                travail fait la différence.
-              </p>
-            </div>
-
-            <article className="emp">
-              <div className="emp__profile">
-                <p className="emp__badge">
-                  <TrophyIcon /> Employé du mois
-                </p>
-
-                <div className="emp__person">
-                  <span className="emp__avatar">BS</span>
-                  <div className="emp__id">
-                    <h3 className="emp__name">Boubacar Sylla</h3>
-                    <p className="emp__role">Chef menuisier</p>
-                    <p className="emp__team">Atelier menuiserie</p>
-                  </div>
-                </div>
-
-                <div className="emp__rating">
-                  <span className="emp__stars" aria-label="5 étoiles sur 5">
-                    <StarIcon />
-                    <StarIcon />
-                    <StarIcon />
-                    <StarIcon />
-                    <StarIcon />
-                  </span>
-                  <span className="emp__period">Juin 2026</span>
-                </div>
-              </div>
-
-              <div className="emp__content">
-                <QuoteIcon className="emp__quote-icon" />
-                <blockquote className="emp__quote">
-                  Chaque meuble qui sort de l'atelier porte le nom de Taverne.
-                  La qualité, c'est notre signature — et ça commence par le
-                  détail.
-                </blockquote>
-
-                <div className="emp__stats">
-                  <div className="emp__stat">
-                    <div className="emp__stat-value">12 ans</div>
-                    <div className="emp__stat-label">
-                      d'ancienneté dans l'atelier
-                    </div>
-                  </div>
-                  <div className="emp__stat">
-                    <div className="emp__stat-value">38</div>
-                    <div className="emp__stat-label">
-                      projets livrés cette année
-                    </div>
-                  </div>
-                  <div className="emp__stat">
-                    <div className="emp__stat-value">100%</div>
-                    <div className="emp__stat-label">
-                      commandes dans les délais
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </article>
           </div>
         </section>
 
@@ -587,6 +512,13 @@ const feed = [
     action: "Seuil bas : chêne massif (8 u.)",
     time: "il y a 2 min",
     dot: "#c79a3a",
+  },
+  {
+    icon: BriefcaseIcon,
+    who: "Chargé commercial",
+    action: "Devis envoyé — Hôtel Tiama",
+    time: "il y a 3 min",
+    dot: "#9c6b3f",
   },
   {
     icon: UserIcon,

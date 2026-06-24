@@ -2,6 +2,7 @@ import "./Sidebar.css";
 import { useState } from "react";
 import { House, LogOut } from "../../../icons";
 import { NAV } from "../../data";
+import RappelsMenu from "../../../rappels/RappelsMenu";
 
 export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
   const [active, setActive] = useState("Tableau de bord");
@@ -35,6 +36,15 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
             ))}
           </div>
         ))}
+
+        <div className="sb__group">
+          <p className="sb__group-title">Outils</p>
+          <RappelsMenu
+            scope="admin"
+            className="sb__item"
+            iconClassName="sb__item-icon"
+          />
+        </div>
       </nav>
 
       <div className="sb__footer">

@@ -4,6 +4,7 @@ import {
   ArrowLeftIcon,
   ArrowRightIcon,
   BoxIcon,
+  BriefcaseIcon,
   CalendarIcon,
   ChevronRightIcon,
   CreditCardIcon,
@@ -45,6 +46,12 @@ const SPACES: Space[] = [
     icon: UserIcon,
     title: "Conseil client",
     desc: "Prospects et pipeline commercial",
+  },
+  {
+    id: "commercial",
+    icon: BriefcaseIcon,
+    title: "Chargé commercial",
+    desc: "Ventes, objectifs et devis",
   },
   {
     id: "stock",

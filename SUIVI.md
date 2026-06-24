@@ -331,12 +331,284 @@ c:\ERP_TARVERNE\
   Premier commit `first commit` (85 fichiers, **sans `node_modules`**) poussé sur
   **https://github.com/Franckdevs/ERP_TAVERNE** (branche `main`).
 
+### 2026-06-23 — Menu « Rappels » commun à tous les espaces
+- **Composant réutilisable `src/rappels/RappelsMenu.tsx` (+ `.css`)** : un seul
+  composant **autonome** qui rend lui-même son **bouton de menu** (stylé pour
+  épouser la sidebar hôte via les props `className`/`iconClassName`) et, au clic,
+  ouvre une **modale** (rendue dans `<body>` via `createPortal`) pour créer un
+  **rappel** avec un **intitulé**, une **date** et une **heure**.
+  - Liste triée par date+heure, **case « fait »** (barré), **suppression**,
+    badge **« En retard »** sur les rappels échus non faits, libellés relatifs
+    (*Aujourd'hui / Demain / Hier*), **compteur** de rappels à venir dans le menu.
+  - **Persistance `localStorage`**, clé **distincte par espace** (`scope`) :
+    `taverne:rappels:<scope>`. Fermeture par **Échap** / clic extérieur, blocage
+    du défilement à l'ouverture. Thème brun Taverne (préfixe CSS `rpl-`),
+    indépendant du mode sombre des dashboards.
+- **Intégré aux 6 espaces** sans toucher à leur routage — une simple insertion
+  dans la sidebar, stylée aux classes de chaque hôte :
+  - **Admin** (`dashboard-admin/.../Sidebar.tsx`) — groupe « Outils », `sb__item`.
+  - **Stock** (`dashboard-stock/.../Sidebar.tsx`) — `stk-sb__item`.
+  - **Comptabilité** (`ComptabiliteDashboard.tsx`) — `cc-sb__item`.
+  - **Assistanat / Conseil client / Personnel** (`pages/*Dashboard.tsx`) — groupe
+    « Outils », `dash__nav-item`.
+- **Icônes** ajoutées au barrel `src/icons/` : `AlarmClock`, `CalendarClock`,
+  `Clock`, `Check`, `Trash2`.
+- Vérifié : **build Vite OK** (1843 modules).
+
+### 2026-06-23 — Comptabilité : menu « Paramètres généraux »
+- Nouveau **menu autonome** dans la sidebar de l'espace Comptabilité (sous les
+  groupes et le menu Rappels), vue `parametres` (`ComptaView`).
+- **`src/dashboard-comptabilite/views/ParametresView.tsx`** : page de réglages
+  (mock, état de session, aucun backend) en 4 sections —
+  **Identité de l'entreprise**, **Exercice & devise** (année, devise, mois de
+  clôture, format de date), **Caisse** (solde d'ouverture, seuil d'alerte caisse
+  basse), **Préférences** (mode sombre par défaut, alertes email, double
+  validation des saisies) ; boutons **Enregistrer** / **Réinitialiser** + bandeau
+  de confirmation.
+- Câblage `ComptabiliteDashboard.tsx` (import + bouton sidebar + `META` +
+  rendu), icône **`SettingsIcon`** (engrenage) dans `icons.tsx`, styles
+  **interrupteurs `cc-switch`** + bandeau **`cc-saved`** dans le CSS. Câble enfin
+  le `"parametres"` déjà présent dans `types.ts`.
+- Vérifié : **`tsc --noEmit` OK**.
+
+### 2026-06-23 — Volet « Alertes » (cloche) + bannière tableau de bord
+- Nouveau module réutilisable **`src/alertes/`** : on planifie une alerte avec un
+  **intitulé**, une **date**, une **heure** et une **priorité** (Maximale /
+  Moyenne / Basse). Quand la date arrive, l'alerte est **déclenchée** et
+  apparaît **partout sur le tableau de bord**.
+  - **`useAlertes.ts`** — store `localStorage` par espace (`taverne:alertes:<scope>`)
+    avec **pub/sub intra-onglet** (cloche ↔ bannière synchronisées) + écoute
+    `storage` (multi-onglets) ; horloge `useNow` (tick 30 s) pour déclencher les
+    alertes échues sans rechargement.
+  - **`AlertesMenu.tsx`** — bouton **cloche** (compteur d'alertes en cours, coloré
+    selon la priorité la plus haute) + **modale** de gestion (création, priorité
+    segmentée, liste triée, **acquitter** / **réactiver** / **supprimer**).
+  - **`AlertesBanner.tsx`** — pile de **toasts flottants** (portail `<body>`,
+    position fixe) affichant les alertes déclenchées non acquittées, triées par
+    priorité ; bouton **« J'ai vu »** (acquitte) et fermeture.
+  - **`Alertes.css`** — préfixe `alt-`, code couleur priorité (rouge / ambre /
+    bleu), modale brun Taverne, toasts colorés ; indépendant du mode sombre.
+- **Câblé à l'espace Comptabilité** : la cloche de la topbar
+  (`ComptabiliteDashboard.tsx`) est remplacée par `<AlertesMenu scope="comptabilite">`
+  et `<AlertesBanner scope="comptabilite">` est monté à la racine du dashboard
+  (icône `BellIcon` locale retirée des imports).
+- Vérifié : **`tsc --noEmit` OK** + **build Vite OK** (1848 modules).
+
+### 2026-06-23 — Alignement avec l'entreprise réelle (lataverne.ci)
+- D'après le site **https://lataverne.ci/**, La Taverne est une entreprise
+  d'**architecture d'intérieur / aménagement & rénovation** (et non « Habitat &
+  Mobilier ») — Cocody, Djorobité 1, Abidjan · infos@lataverne.ci ·
+  +225 07 68 36 76 09.
+- **Carte « Employé du mois »** (`HomePage.tsx`) : Bamba Ange Sarah →
+  **Chef comptable / Espace Comptabilité** (citation + stats réécrites côté compta).
+- **Valeurs par défaut des Paramètres généraux** (`ParametresView.tsx`) :
+  raison sociale, téléphone, email et adresse mis aux **vraies coordonnées**.
+- **Landing** (`HomePage.tsx`) : sous-titre du hero retiré, puis **section
+  « Employé du mois » (`#equipe`) entièrement supprimée** (imports `TrophyIcon` /
+  `StarIcon` / `QuoteIcon` retirés). *CSS `.emp*` conservé dans `HomePage.css`
+  (mort, à nettoyer éventuellement).*
+
+### 2026-06-23 — Nouveau tableau de bord « Chargé commercial »
+- **6ᵉ espace** ajouté au sélecteur (`SpaceModal.tsx`, grille 3×2) : *Chargé
+  commercial — « Ventes, objectifs et devis »* (icône **`BriefcaseIcon`** ajoutée
+  au barrel `components/icons.tsx`). Route **`#/commercial`** câblée dans `App.tsx`.
+- **`src/pages/CommercialDashboard.tsx` (+ `.css`)** — réutilise la coquille
+  `dash` (AssistantDashboard.css) + utilitaires `crm-*` (ConseilDashboard.css) :
+  - **4 KPI** (CA réalisé, objectif mensuel avec barre, devis en cours,
+    commandes signées) ;
+  - **Objectifs commerciaux** (barres de progression calculées) ;
+  - **Devis & commandes récents** (table + chips de statut, **modale Nouveau
+    devis** pour en ajouter) ;
+  - **Activité commerciale récente** (appels / visites / relances / signatures) ;
+  - **Top clients du mois** (classement avec barres relatives).
+- Intègre **Rappels** + **Alertes** (cloche topbar + menu sidebar + bannière),
+  `scope="commercial"`.
+- Vérifié : **`tsc --noEmit` OK** + **build Vite OK** (1850 modules).
+
+### 2026-06-24 — Volet « Chargé commercial » dans le fil d'activité (landing)
+- **`HomePage.tsx`** — ajout d'une entrée *Chargé commercial* (« Devis envoyé —
+  Hôtel Tiama », icône **`BriefcaseIcon`**, pastille `#9c6b3f`, « il y a 3 min »)
+  dans le mockup **« Fil d'activité · En direct »** (composant `ActivityFeed`),
+  insérée en ordre chronologique entre *Gestion de stock* et *Conseil client*.
+  Le fil reflète désormais les 5 métiers visibles sur la landing.
+
+### 2026-06-24 — Messagerie : retrait appel/vidéo + affichage page complète
+- **`Messenger.tsx/.css`** — boutons **Appel** et **Appel vidéo** retirés de
+  l'en-tête de conversation (import `Phone` + CSS `.msg__head-actions` d'origine
+  nettoyés ; `Video` conservé car utilisé par le menu pièces jointes).
+- **Affichage en page complète** ajouté au volet messagerie :
+  - bouton **plein écran / réduire** (`Maximize2` / `Minimize2`) dans les en-têtes ;
+  - en mode plein écran, **deux volets côte à côte** (liste des discussions +
+    conversation) avec **état vide** quand aucune discussion n'est choisie ;
+  - mode dock inchangé (un seul volet à la fois) ; bascule pilotée par
+    `CollabDock` (état `msgsFull`, conteneur **`.dock__full`** plein écran).
+  - Responsive : sous 720 px, le plein écran repasse à **un seul volet** (liste
+    OU conversation) avec bouton retour ; surbrillance `thread.is-active`.
+- Vérifié : **`tsc --noEmit` OK pour `collab/`** (2 erreurs préexistantes hors
+  périmètre dans `modules/accounting` & `shared/ui/Card`) + **build Vite OK**.
+
+### 2026-06-24 — Fondations « ERP enterprise-grade » (Phase 1 d'architecture)
+> Mise en place d'une architecture **scalable, modulaire et plugin-based**, de
+> façon **additive** (les 6 dashboards existants ne sont **pas déplacés** ni
+> cassés). Les 2 erreurs `tsc` signalées plus haut (`modules/accounting`,
+> `shared/ui/Card`) sont **résolues** par cette étape.
+- **Dépendances** : ajout de **`zustand`** (client state) et
+  **`@tanstack/react-query`** (server state) ; **`@types/node`** (devDep) pour la
+  config Vite.
+- **Couches** introduites (sens de dépendance unique `app → modules → shared → core`) :
+  - **`core/`** — infrastructure agnostique : `config/env.ts` (env typé,
+    `VITE_API_URL` / `VITE_USE_MOCKS`), `types/result.ts` (`Result`/`Paginated`/
+    `ApiError`), `api/http-client.ts` (wrapper `fetch` + JWT + erreurs normalisées),
+    `api/query-client.ts`, **`auth/`** (token en mémoire, store **Zustand** +
+    `useAuth`, **RBAC** `hasPermission`), **`module/`** (contrat `ModuleManifest`
+    + **registre** `MODULES`).
+  - **`shared/`** — réutilisable : `lib/format.ts` (FCFA + dates fr-FR),
+    `hooks/` (`useDisclosure`, `useLocalStorage`), `styles/tokens.css` (échelles
+    espacement/rayon/élévation/z-index + couleurs sémantiques), **Design System**
+    `ui/` en **CSS Modules** (`Button`, `Card`, `Badge`, `Modal` — scoping, fini
+    les préfixes manuels).
+  - **`modules/`** — **1 manifeste par pôle** (`admin`, `accounting`, `assistant`,
+    `crm`, `commercial`, `inventory`, `hr`) qui **charge en lazy** le dashboard
+    existant (aucun fichier déplacé). **Pilote Repository Pattern** complet sur
+    `accounting/api/` : interface `AccountingRepository` + impl. **mock** et
+    **http** (NestJS) + **factory** (`VITE_USE_MOCKS`) + hook
+    `useTransactions` (React Query). → bascule vers la vraie API = **1 variable**.
+  - **`app/`** — `providers/AppProviders.tsx` (`QueryClientProvider`),
+    `router/AppRouter.tsx` (**React Router v7 — `HashRouter`**, routes générées
+    **depuis le registre**, `Suspense` + **code splitting par module**),
+    `router/guards/ProtectedRoute.tsx` (RBAC, permissif via utilisateur de démo).
+- **`App.tsx`** réduit à une **racine de composition** (`<AppProviders><AppRouter/>`) ;
+  le routage par `hashchange` manuel est remplacé. **`SpaceModal` inchangé**
+  (pose toujours `window.location.hash = "#/<espace>"`, lu par `HashRouter`).
+- **Config** : alias **`@` → `src`** ajouté à `vite.config.ts` (miroir de
+  `tsconfig`), **`manualChunks`** (`react`, `query`) ; `tsconfig.node.json` reçoit
+  `types:["node"]` ; suppression des artefacts compilés parasites
+  `vite.config.js`/`.d.ts` (déjà gitignorés) qui masquaient le `.ts`.
+- **Résultat mesuré** : bundle d'entrée **376 Ko → 59 Ko**, chaque dashboard et
+  chaque vendor (react/query) dans son **chunk lazy** séparé.
+- Vérifié : **`npm run build` OK** (tsc strict `-b` **+** Vite) — pipeline complet
+  au vert, **0 erreur TypeScript**.
+
+### 2026-06-24 — Icône monnaie : dollar ($) → FCFA
+- Nouvelle **icône maison `Fcfa`** (`src/icons/Fcfa.tsx`, via `createLucideIcon` →
+  style lucide cohérent) : une **pièce avec un « F »** (franc), pour représenter la
+  monnaie sans symbole dollar. Ré-exportée par le barrel `src/icons/`.
+- **`DollarSign` retiré** du barrel et de la carte **« Dépenses · mois »**
+  (`dashboard-admin/data.ts`) → remplacé par `Fcfa`. Plus aucun `$` dans le projet.
+  *(Les autres KPI monnaie utilisaient déjà `Wallet`/`Coins`/`CreditCard`, sans
+  symbole dollar — laissés tels quels.)*
+- Vérifié : **`tsc --noEmit` OK** + **build Vite OK**.
+
+### 2026-06-24 — Landing : ajout du « Chargé commercial »
+- **Section Applications** (`HomePage.tsx`) : ajout d'une **6ᵉ carte** *Chargé
+  commercial* (icône `BriefcaseIcon`, « Ventes, objectifs, devis et relances »),
+  insérée entre *Conseil client* et *Gestion de stock*.
+- Mises à jour du texte **« cinq » → « six »** : eyebrow *« Six applications, un
+  seul système »*, avantages *« Supervision centrale »* / *« Données
+  synchronisées »*, et mockup *« activité des six métiers »*.
+- *(Le fil d'activité « En direct » et le sélecteur d'espace incluaient déjà le
+  Chargé commercial.)* Vérifié : **build Vite OK**.
+
+### 2026-06-24 — Espace commercial : tableau de bord multi-vues
+- Le dashboard **Chargé commercial** passe d'**une seule page** à un **menu
+  groupé** (pattern `dash` multi-vues, comme Assistanat/Personnel) :
+  - **Pilotage** → *Vue d'ensemble* (KPI, objectifs, devis récents, activité,
+    top clients — contenu existant conservé).
+  - **Ventes** → *Pipeline* (kanban 5 étapes : Prospection → Qualification →
+    Proposition → Négociation → Gagné, valeur pondérée par probabilité) ·
+    *Devis & commandes* (table + **filtres par statut** + Nouveau devis).
+  - **Clients** → *Clients & prospects* (table + filtre Client/Prospect, étiquette
+    de type) · *Visites & RDV* (planning terrain de la semaine).
+  - **Performance** → *Objectifs* (mensuels **+ annuels**) · *Relances*
+    (liste triée par priorité avec bouton **Fait/Annuler**).
+  - **Outils** → Rappels + Alertes (inchangés).
+- Chaque vue affiche ses **sous-stats** contextuelles (`com-substats`). Nouvelles
+  classes CSS dans `CommercialDashboard.css` : `com-pipe*` (kanban), `com-filter`
+  (pills de filtre), `com-tag` (type client), `com-prio*` (priorité), `com-relance*`
+  (liste de relances), `com-substat*`. Nouvelles icônes locales (Calendar, MapPin,
+  Check, Clock).
+- Vérifié : **build Vite OK** (CommercialDashboard en chunk lazy 30 Ko).
+  *NB : `tsc` signale 2 imports inutilisés (`PeriodFilter`, `periodSeries`) — c'est
+  le filtre de période en cours de câblage côté utilisateur, hors de cette tâche.*
+
+### 2026-06-24 — Filtre Mois / Jour fonctionnel sur les graphiques
+- **Composant réutilisable `src/components/period/`** :
+  - `PeriodFilter.tsx` (+ `.css`) — deux listes déroulantes **Mois** (Année + 12 mois)
+    et **Jour** (activée dès qu'un mois est choisi, options adaptées à la longueur
+    du mois). Couleurs en `currentColor` → s'adapte aux en-têtes clairs **et sombres**.
+  - `periodSeries.ts` — helpers **déterministes** (hash sinusoïdal seedé, aucun
+    `Math.random` → rendu stable) : `resolveSeries` (flux réparti sur le mois /
+    niveau interpolé + libellés d'axe + jour mis en évidence), `periodFactor` /
+    `scaleByPeriod` (repondération des distributions), `dailyFlow`, `dailyLevel`,
+    `daysInMonth`, `periodLabel`.
+- **Sémantique** : *Année* = vue 12 mois d'origine ; *Mois* = détail jour par jour
+  (axe = numéros de jour) ; *Mois + Jour* = idem avec le jour ciblé mis en évidence.
+  Les distributions (donut, barres) sont repondérées par période.
+- **Graphiques câblés** :
+  - **Admin** (`dashboard-admin`) : *Évolution des ventes* (courbe → détail
+    journalier + point du jour), *Répartition des dépenses* (donut + total/unité
+    recalculés, « FCFA · jour » si un jour est ciblé), *Productivité des équipes*.
+  - **Comptabilité** (`DashboardView`) : *Entrées vs Dépenses* (histogramme),
+    *Évolution du Solde* (aire, série de niveau), *Répartition des dépenses* (donut).
+    `RepartitionView` : sélecteur **Mois** rendu fonctionnel + **Jour** ajouté
+    (donut repondéré ; Juin sans jour = données de référence).
+  - **Personnel** : *Répartition des contrats* (filtre en `action` du `Panel`,
+    effectifs repondérés par type de contrat).
+- **Commercial** : câblage du filtre **réalisé côté utilisateur** (restructuration
+  multi-vues en cours) — non touché ici, import provisoire retiré.
+- Vérifié : **`tsc --noEmit` OK** + **build Vite OK** (1931 modules, `PeriodFilter`
+  en chunk dédié ~2,8 Ko).
+
+---
+
+## 🏛️ Architecture (depuis 2026-06-24)
+
+```
+src/
+├── app/        # composition : providers + router (registre → routes lazy)
+├── core/       # infra agnostique : config, api(http+query), auth(RBAC), module
+├── shared/     # réutilisable : ui(Design System CSS Modules), hooks, lib, styles
+├── modules/    # 1 manifeste plugin par pôle (lazy) + api(repository) — pilote: accounting
+├── pages/ dashboard-*/ collab/ rappels/ alertes/   # existant (intact, chargé en lazy)
+└── App.tsx main.tsx
+```
+- **Ajouter un espace** = créer `modules/<x>/module.manifest.ts` + l'enregistrer
+  dans `core/module/registry.ts`. Le routeur et (à terme) la navigation se
+  construisent tout seuls.
+- **Patterns** : Feature-Based, Repository + Factory (mock↔HTTP), Service/DI léger,
+  state **Zustand (client) + React Query (server)**, plugin registry.
+- **Suites prévues (Phase 2/3)** : MSW (mocks réseau), vrai login JWT + guards
+  effectifs, migration physique des dashboards vers `modules/` + consolidation des
+  3 coquilles (`.dash`/`.cc-`/`.stk-`) sur le Design System, tests Vitest+RTL, i18n.
+
+### 2026-06-24 — Admin : cartes KPI plus compactes
+- **`dashboard-admin/components/StatCards/StatCards.css`** : cartes de stats
+  réduites — padding `1.1/1.2/1.25rem` → `0.8/0.9rem`, rayon `1rem` → `0.8rem`,
+  écart haut `1.1rem` → `0.6rem`, icône `2.5rem` → `2.1rem`, valeur `1.5rem` →
+  `1.3rem`, libellé `0.82rem` → `0.78rem`, `gap` de grille `1rem` → `0.8rem`.
+  Grille et points de rupture responsive inchangés.
+
+### 2026-06-24 — Cloche de notifications (Alertes) active sur tous les espaces
+- Jusqu'ici, seuls **Comptabilité** et **Commercial** disposaient de la cloche
+  fonctionnelle (`AlertesMenu`) ; les cinq autres avaient un **bouton cloche
+  statique** (décoratif). La cloche `AlertesMenu` (planification d'alertes +
+  compteur + modale en portail) est désormais branchée **partout** :
+  - **Admin** (`dashboard-admin/.../Topbar.tsx`, scope `admin`) — `<Bell>` statique
+    + pastille `--dot` remplacés par `<AlertesMenu variant="icon" />`.
+  - **Stock** (`dashboard-stock/.../Topbar.tsx`, scope `stock`).
+  - **Assistanat** (scope `assistanat`), **Conseil** (scope `conseil`),
+    **Personnel** (scope `personnel`) — boutons cloche statiques (`dash__icon-btn`
+    + `dash__dot`) remplacés par `<AlertesMenu variant="icon" />`.
+- Scopes alignés sur ceux des **Rappels** déjà en place (stockage séparé par espace).
+  Imports `BellIcon` / `Bell` devenus inutiles retirés.
+- Vérifié : **`tsc` OK** + **build Vite OK** (1931 modules).
+
 ---
 
 ## ▶️ Commandes
 
 ```powershell
-cd C:\ERP_TARVERNE\FRONT_TAVERNE_ERP
+cd C:\ERP_TARVERNE
 npm install      # installer les dépendances
 npm run dev      # serveur de dev — http://localhost:5173
 npm run build    # build de production (dist/)
@@ -356,9 +628,13 @@ npm run preview  # prévisualiser le build
 
 ## ✅ À faire / prochaines étapes
 
-- [ ] Routing **React Router** (remplacer le routage par hash provisoire d'`App.tsx`).
-      Les 6 espaces sont désormais créés (admin, comptabilité, assistanat, conseil,
-      personnel, stock).
-- [ ] Client API (`fetch` basé sur `VITE_API_URL`).
-- [ ] Backend NestJS (API REST) + authentification par rôle.
-- [ ] (Optionnel) Mode sombre via un bouton de bascule manuel.
+- [x] Routing **React Router** (v7 `HashRouter`, routes générées depuis le
+      registre de modules — voir section *Architecture*). 7 espaces (admin,
+      comptabilité, assistanat, conseil, **commercial**, personnel, stock).
+- [x] **Couche API abstraite** (`core/api/http-client.ts` + Repository pattern,
+      pilote `accounting`). *Reste : généraliser aux autres modules.*
+- [ ] Backend NestJS (API REST) + brancher `VITE_USE_MOCKS=false` + vrai login JWT.
+- [ ] MSW (mocks réseau) + tests **Vitest + RTL**.
+- [ ] Migration physique des dashboards vers `modules/` + Design System (consolider
+      les coquilles `.dash`/`.cc-`/`.stk-`).
+- [ ] (Optionnel) Mode sombre global via le store + bouton de bascule.

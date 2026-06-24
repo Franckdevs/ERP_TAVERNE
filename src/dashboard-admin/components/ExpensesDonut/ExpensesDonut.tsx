@@ -1,10 +1,39 @@
 import "./ExpensesDonut.css";
-import { EXPENSES, EXPENSES_TOTAL } from "../../data";
+import { useState } from "react";
+import { EXPENSES } from "../../data";
+import PeriodFilter from "../../../components/period/PeriodFilter";
+import {
+  periodFactor,
+  daysInMonth,
+  EMPTY_PERIOD,
+  type Period,
+} from "../../../components/period/periodSeries";
 
 const R = 70;
 const C = 2 * Math.PI * R;
+const YEAR = 2026;
+const BASE_TOTAL_M = 22.3; // dépenses mensuelles de référence (millions FCFA)
 
 export default function ExpensesDonut() {
+  const [period, setPeriod] = useState<Period>(EMPTY_PERIOD);
+
+  /* parts repondérées selon la période, renormalisées à 100 % */
+  const weighted = EXPENSES.map((e, i) => e.pct * periodFactor(i, period));
+  const sum = weighted.reduce((s, v) => s + v, 0) || 1;
+  const slices = EXPENSES.map((e, i) => ({
+    ...e,
+    pct: Math.round((weighted[i] / sum) * 100),
+  }));
+
+  /* total affiché : mensuel, ou journalier si un jour est ciblé */
+  const globalFactor = periodFactor(99, period);
+  const isDay = period.day != null;
+  const totalM = isDay
+    ? (BASE_TOTAL_M * globalFactor) / daysInMonth(YEAR, period.month!)
+    : BASE_TOTAL_M * globalFactor;
+  const totalLabel = `${totalM.toFixed(1).replace(".", ",")}M`;
+  const unit = isDay ? "FCFA · jour" : "FCFA · mois";
+
   let acc = 0;
 
   return (
@@ -13,6 +42,7 @@ export default function ExpensesDonut() {
         <div>
           <h2 className="card__title">Répartition des dépenses</h2>
         </div>
+        <PeriodFilter value={period} onChange={setPeriod} year={YEAR} size="sm" />
       </header>
 
       <div className="donut">
@@ -26,7 +56,7 @@ export default function ExpensesDonut() {
               stroke="var(--muted)"
               strokeWidth="20"
             />
-            {EXPENSES.map((e) => {
+            {slices.map((e) => {
               const len = (e.pct / 100) * C;
               const seg = (
                 <circle
@@ -47,16 +77,16 @@ export default function ExpensesDonut() {
             })}
           </g>
           <text x="90" y="84" className="donut__value" textAnchor="middle">
-            {EXPENSES_TOTAL}
+            {totalLabel}
           </text>
           <text x="90" y="102" className="donut__unit" textAnchor="middle">
-            FCFA · mois
+            {unit}
           </text>
         </svg>
       </div>
 
       <ul className="donut__legend">
-        {EXPENSES.map((e) => (
+        {slices.map((e) => (
           <li className="donut__legend-item" key={e.label}>
             <span className="donut__dot" style={{ backgroundColor: e.color }} />
             <span className="donut__legend-label">{e.label}</span>

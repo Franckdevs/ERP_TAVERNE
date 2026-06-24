@@ -8,13 +8,14 @@ import type {
 } from "react";
 import "./AssistantDashboard.css";
 import {
-  BellIcon,
   CalendarIcon,
   HouseIcon,
   MailIcon,
   MessageIcon,
   XIcon,
 } from "../components/icons";
+import RappelsMenu from "../rappels/RappelsMenu";
+import AlertesMenu from "../alertes/AlertesMenu";
 
 /* --------------------------------------------------------------------------
    Icônes propres au tableau de bord (au trait, basées sur currentColor)
@@ -732,6 +733,11 @@ export default function AssistantDashboard({
               ))}
             </div>
           ))}
+
+          <div className="dash__nav-group">
+            <p className="dash__nav-label">Outils</p>
+            <RappelsMenu scope="assistanat" className="dash__nav-item" />
+          </div>
         </nav>
 
         <div className="dash__foot">
@@ -773,14 +779,7 @@ export default function AssistantDashboard({
             >
               {dark ? <SunIcon /> : <MoonIcon />}
             </button>
-            <button
-              className="dash__icon-btn"
-              type="button"
-              aria-label="Notifications"
-            >
-              <BellIcon />
-              <span className="dash__dot" />
-            </button>
+            <AlertesMenu scope="assistanat" className="dash__icon-btn" variant="icon" />
             <span className="dash__avatar">AM</span>
           </div>
         </header>

@@ -17,9 +17,9 @@ import {
   SearchIcon,
   MoonIcon,
   SunIcon,
-  BellIcon,
   LogOutIcon,
   HouseIcon,
+  SettingsIcon,
 } from "./icons";
 import DashboardView from "./views/DashboardView";
 import BrouillardView from "./views/BrouillardView";
@@ -27,6 +27,10 @@ import RepartitionView from "./views/RepartitionView";
 import RecapView from "./views/RecapView";
 import ProjetsView from "./views/ProjetsView";
 import { CategoriesView, LibellesView, PostesView } from "./views/ReferentielsView";
+import ParametresView from "./views/ParametresView";
+import RappelsMenu from "../rappels/RappelsMenu";
+import AlertesMenu from "../alertes/AlertesMenu";
+import AlertesBanner from "../alertes/AlertesBanner";
 
 /* --- Navigation latérale (groupes repliables / menus déroulants) --------- */
 type Leaf = { id: ComptaView; label: string; icon: typeof DashboardIcon };
@@ -73,6 +77,7 @@ const META: Record<ComptaView, { title: string; sub: string }> = {
   postes: { title: "Postes", sub: "Métiers des ouvriers" },
   recap: { title: "Récapitulatif annuel", sub: `${ANNEE_COURANTE} — bilan mois par mois` },
   repartition: { title: "Répartition des dépenses", sub: `Par catégorie — ${MOIS_LONG[MOIS_COURANT - 1]} ${ANNEE_COURANTE}` },
+  parametres: { title: "Paramètres généraux", sub: "Identité, exercice, caisse et préférences de l'espace" },
 };
 
 /* Groupe ouvert par défaut : celui qui contient la vue active */
@@ -99,6 +104,7 @@ export default function ComptabiliteDashboard({ onLogout }: { onLogout?: () => v
 
   return (
     <div className={`cc${dark ? " cc--dark" : ""}`}>
+      <AlertesBanner scope="comptabilite" />
       {drawer && <div className="cc-backdrop" onClick={() => setDrawer(false)} />}
 
       {/* --- Sidebar --- */}
@@ -160,6 +166,22 @@ export default function ComptabiliteDashboard({ onLogout }: { onLogout?: () => v
               </div>
             );
           })}
+
+          <RappelsMenu
+            scope="comptabilite"
+            className="cc-sb__item"
+            iconClassName="cc-sb__item-icon"
+          />
+
+          <button
+            type="button"
+            className={`cc-sb__item${view === "parametres" ? " is-active" : ""}`}
+            onClick={() => navigate("parametres")}
+            aria-current={view === "parametres" ? "page" : undefined}
+          >
+            <SettingsIcon className="cc-sb__item-icon" />
+            <span>Paramètres généraux</span>
+          </button>
         </nav>
 
         <div className="cc-sb__footer">
@@ -207,9 +229,7 @@ export default function ComptabiliteDashboard({ onLogout }: { onLogout?: () => v
             >
               {dark ? <SunIcon /> : <MoonIcon />}
             </button>
-            <button type="button" className="cc-tb__icon-btn cc-tb__icon-btn--dot" aria-label="Notifications">
-              <BellIcon />
-            </button>
+            <AlertesMenu scope="comptabilite" className="cc-tb__icon-btn" variant="icon" />
             <span className="cc-tb__avatar">BS</span>
           </div>
         </header>
@@ -223,6 +243,7 @@ export default function ComptabiliteDashboard({ onLogout }: { onLogout?: () => v
           {view === "categories" && <CategoriesView />}
           {view === "libelles" && <LibellesView />}
           {view === "postes" && <PostesView />}
+          {view === "parametres" && <ParametresView />}
         </main>
       </div>
     </div>

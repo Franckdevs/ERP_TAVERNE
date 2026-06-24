@@ -7,7 +7,6 @@ import {
   MOIS_COURANT,
   RECAP_2026,
   REPARTITION_JUIN,
-  TOTAL_REPARTITION,
   TRANSACTIONS_JUIN,
   TOTAL_ENTREES_ANNEE,
   TOTAL_DEPENSES_ANNEE,
@@ -22,6 +21,14 @@ import {
   isoDate,
 } from "../data";
 import { Donut, GroupedBars, AreaCurve } from "../charts";
+import PeriodFilter from "../../components/period/PeriodFilter";
+import {
+  resolveSeries,
+  scaleByPeriod,
+  periodLabel,
+  EMPTY_PERIOD,
+  type Period,
+} from "../../components/period/periodSeries";
 import {
   WalletIcon,
   TrendingUpIcon,
@@ -50,6 +57,11 @@ export default function DashboardView({ navigate }: { navigate: Navigate }) {
   const [rechTx, setRechTx] = useState("");
   const [pageMois, setPageMois] = useState(0);
   const [pageTx, setPageTx] = useState(0);
+
+  /* filtres période (mois / jour) des graphiques */
+  const [pBars, setPBars] = useState<Period>(EMPTY_PERIOD);
+  const [pSolde, setPSolde] = useState<Period>(EMPTY_PERIOD);
+  const [pRepart, setPRepart] = useState<Period>(EMPTY_PERIOD);
 
   const moisNom = MOIS_LONG[MOIS_COURANT - 1];
 
@@ -93,6 +105,28 @@ export default function DashboardView({ navigate }: { navigate: Navigate }) {
   const entrees = RECAP_2026.map((m) => m.entrees);
   const depenses = RECAP_2026.map((m) => m.depenses);
   const soldes = RECAP_2026.map((m) => m.soldeFin);
+
+  /* allège les libellés d'axe en vue journalière (28–31 jours) */
+  const thin = (l: string[]) =>
+    l.length > 16 ? l.map((x, i) => (i % 3 === 0 ? x : "")) : l;
+
+  /* séries résolues selon les filtres */
+  const barsE = resolveSeries(entrees, labels, pBars, ANNEE_COURANTE, "flow");
+  const barsD = resolveSeries(depenses, labels, pBars, ANNEE_COURANTE, "flow");
+  const solde = resolveSeries(soldes, labels, pSolde, ANNEE_COURANTE, "level");
+
+  /* répartition repondérée selon la période */
+  const repart = scaleByPeriod(
+    REPARTITION_JUIN,
+    pRepart,
+    (r) => r.montant,
+    (r, v) => ({ ...r, montant: v })
+  );
+  const totalRepart = repart.reduce((s, r) => s + r.montant, 0) || 1;
+  const repartSub =
+    pRepart.month == null
+      ? `${moisNom} ${ANNEE_COURANTE} — ${REPARTITION_JUIN.length} catégories`
+      : `${periodLabel(pRepart, ANNEE_COURANTE)} — ${repart.length} catégories`;
 
   /* Bilan par mois (mois enregistrés) */
   const moisAvecData = RECAP_2026.filter((m) => m.entrees > 0 || m.depenses > 0);
@@ -172,10 +206,11 @@ export default function DashboardView({ navigate }: { navigate: Navigate }) {
           <header className="cc-panel__head cc-panel__head--bar">
             <div>
               <h2 className="cc-panel__title">Entrées vs Dépenses</h2>
-              <p className="cc-panel__sub">{ANNEE_COURANTE}</p>
+              <p className="cc-panel__sub">{periodLabel(pBars, ANNEE_COURANTE)}</p>
             </div>
+            <PeriodFilter value={pBars} onChange={setPBars} year={ANNEE_COURANTE} size="sm" />
           </header>
-          <GroupedBars labels={labels} entrees={entrees} depenses={depenses} />
+          <GroupedBars labels={thin(barsE.labels)} entrees={barsE.values} depenses={barsD.values} />
           <div className="cc-legend">
             <span className="cc-legend__item"><i style={{ background: "#dc2626" }} /> Dépenses</span>
             <span className="cc-legend__item"><i style={{ background: "#16a34a" }} /> Entrées</span>
@@ -186,10 +221,15 @@ export default function DashboardView({ navigate }: { navigate: Navigate }) {
           <header className="cc-panel__head cc-panel__head--bar">
             <div>
               <h2 className="cc-panel__title">Évolution du Solde</h2>
-              <p className="cc-panel__sub">{ANNEE_COURANTE} — fin de chaque mois</p>
+              <p className="cc-panel__sub">
+                {pSolde.month == null
+                  ? `${ANNEE_COURANTE} — fin de chaque mois`
+                  : periodLabel(pSolde, ANNEE_COURANTE)}
+              </p>
             </div>
+            <PeriodFilter value={pSolde} onChange={setPSolde} year={ANNEE_COURANTE} size="sm" />
           </header>
-          <AreaCurve labels={labels} values={soldes} />
+          <AreaCurve labels={thin(solde.labels)} values={solde.values} />
         </section>
       </div>
 
@@ -198,26 +238,27 @@ export default function DashboardView({ navigate }: { navigate: Navigate }) {
         <header className="cc-panel__head cc-panel__head--bar">
           <div>
             <h2 className="cc-panel__title">Répartition des dépenses</h2>
-            <p className="cc-panel__sub">
-              {moisNom} {ANNEE_COURANTE} — {REPARTITION_JUIN.length} catégories
-            </p>
+            <p className="cc-panel__sub">{repartSub}</p>
           </div>
-          <button
-            type="button"
-            className="cc-link"
-            onClick={() => navigate("repartition")}
-          >
-            <PieIcon /> Voir détail <ArrowRightIcon />
-          </button>
+          <div className="cc-panel__controls">
+            <PeriodFilter value={pRepart} onChange={setPRepart} year={ANNEE_COURANTE} size="sm" />
+            <button
+              type="button"
+              className="cc-link"
+              onClick={() => navigate("repartition")}
+            >
+              <PieIcon /> Voir détail <ArrowRightIcon />
+            </button>
+          </div>
         </header>
 
         <div className="cc-repart">
           <div className="cc-repart__donut">
-            <Donut data={REPARTITION_JUIN.map((r) => ({ value: r.montant, color: r.couleur }))} />
+            <Donut data={repart.map((r) => ({ value: r.montant, color: r.couleur }))} />
           </div>
           <ul className="cc-repart__list">
-            {REPARTITION_JUIN.map((r) => {
-              const pct = (r.montant / TOTAL_REPARTITION) * 100;
+            {repart.map((r) => {
+              const pct = (r.montant / totalRepart) * 100;
               return (
                 <li key={r.slug} className="cc-repart__row">
                   <span className="cc-repart__emoji">{r.emoji}</span>

@@ -12,6 +12,7 @@ export default function CollabDock() {
   const [panel, setPanel] = useState<Panel>("none");
   const [seenMsgs, setSeenMsgs] = useState(false);
   const [alerts, setAlerts] = useState(ALERTS);
+  const [msgsFull, setMsgsFull] = useState(false);
 
   const unreadAlerts = alerts.filter((a) => !a.read).length;
   const unreadMsgs = seenMsgs ? 0 : CONTACTS.reduce((n, c) => n + c.unread, 0);
@@ -21,11 +22,20 @@ export default function CollabDock() {
     if (p === "messages") setSeenMsgs(true);
   };
 
+  const closeMessages = () => {
+    setPanel("none");
+    setMsgsFull(false);
+  };
+
   return (
     <div className="dock">
       {panel === "messages" && (
-        <div className="dock__panel">
-          <Messenger onClose={() => setPanel("none")} />
+        <div className={msgsFull ? "dock__full" : "dock__panel"}>
+          <Messenger
+            onClose={closeMessages}
+            expanded={msgsFull}
+            onToggleExpand={() => setMsgsFull((v) => !v)}
+          />
         </div>
       )}
 

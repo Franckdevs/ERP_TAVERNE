@@ -38,8 +38,12 @@
 
 .msg__head-actions {
   display: flex;
-  gap: 0.25rem;
+  gap: 0.15rem;
   margin-left: auto;
+}
+
+.msg__head-actions .msg__icon {
+  margin-left: 0;
 }
 
 .msg__icon {
@@ -163,6 +167,10 @@
 
 .thread:hover {
   background-color: var(--muted);
+}
+
+.thread.is-active {
+  background-color: var(--soft);
 }
 
 .thread__body {
@@ -540,5 +548,99 @@
   .msg {
     width: calc(100vw - 1.5rem);
     height: 80vh;
+  }
+}
+
+/* ===========================================================================
+   Page complète — deux volets (liste + conversation)
+   --------------------------------------------------------------------------- */
+.msg--full {
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 0.9rem;
+  box-shadow: 0 30px 80px -30px rgba(40, 24, 8, 0.6);
+}
+
+.msg__pane {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.msg__pane--list {
+  width: 21rem;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border);
+}
+
+.msg__pane--chat {
+  flex: 1;
+  background-color: #f6efe6;
+}
+
+/* Sur grand écran, la liste reste visible : le retour arrière est inutile. */
+.msg--full .msg__back {
+  display: none;
+}
+
+/* État vide du volet conversation (aucune discussion sélectionnée) */
+.msg__empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 2rem;
+  text-align: center;
+  color: var(--muted-foreground);
+}
+
+.msg__empty-icon {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  margin-bottom: 0.5rem;
+  border-radius: 50%;
+  background-color: var(--soft);
+  color: var(--brand);
+}
+
+.msg__empty-icon svg {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.msg__empty-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--foreground);
+}
+
+.msg__empty-text {
+  font-size: 0.85rem;
+}
+
+/* Petit écran : un seul volet à la fois (liste OU conversation) */
+@media (max-width: 720px) {
+  .msg--full .msg__pane--list {
+    width: 100%;
+    border-right: none;
+  }
+  .msg--full .msg__pane--chat {
+    display: none;
+  }
+  .msg--full.has-active .msg__pane--list {
+    display: none;
+  }
+  .msg--full.has-active .msg__pane--chat {
+    display: flex;
+  }
+  .msg--full .msg__back {
+    display: grid;
   }
 }
