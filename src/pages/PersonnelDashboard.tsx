@@ -7,7 +7,7 @@ import type {
 } from "react";
 import "./AssistantDashboard.css"; // coquille « dash » partagée
 import "./PersonnelDashboard.css"; // styles propres aux RH
-import { HouseIcon, XIcon } from "../components/icons";
+import { XIcon } from "../components/icons";
 import AlertesMenu from "../alertes/AlertesMenu";
 import PeriodFilter from "../components/period/PeriodFilter";
 import {
@@ -324,11 +324,8 @@ export default function PersonnelDashboard({
       {/* --- Sidebar --- */}
       <aside className="dash__sidebar">
         <div className="dash__brand">
-          <span className="dash__brand-mark">
-            <HouseIcon />
-          </span>
+          <img className="brand-logo" src="/logo-taverne.png" alt="Taverne" />
           <span className="dash__brand-text">
-            <span className="dash__brand-name">Taverne</span>
             <span className="dash__brand-sub">Espace Personnel</span>
           </span>
         </div>

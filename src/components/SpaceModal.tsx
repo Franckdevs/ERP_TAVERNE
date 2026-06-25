@@ -199,6 +199,7 @@ export default function SpaceModal({ open, onClose }: Props) {
         {space === null ? (
           /* --- Étape 1 : choix de l'espace ------------------------------- */
           <div className="sm__step">
+            <img className="sm__logo" src="/logo-taverne.png" alt="Taverne — Un intérieur à votre image" />
             <h2 id="sm-title" className="sm__title">
               Choisissez votre espace
             </h2>

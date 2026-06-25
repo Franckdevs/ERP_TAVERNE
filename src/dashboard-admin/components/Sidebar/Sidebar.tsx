@@ -1,6 +1,6 @@
 import "./Sidebar.css";
 import { useState } from "react";
-import { House, LogOut } from "../../../icons";
+import { LogOut } from "../../../icons";
 import { NAV } from "../../data";
 import RappelsMenu from "../../../rappels/RappelsMenu";
 
@@ -10,11 +10,8 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
   return (
     <aside className="sb">
       <div className="sb__brand">
-        <span className="sb__brand-mark">
-          <House />
-        </span>
+        <img className="brand-logo" src="/logo-taverne.png" alt="Taverne" />
         <span className="sb__brand-text">
-          <span className="sb__brand-name">Taverne</span>
           <span className="sb__brand-sub">Administration centrale</span>
         </span>
       </div>

@@ -3,7 +3,7 @@ import type { ComponentType, FormEvent, ReactNode, SVGProps } from "react";
 import "./AssistantDashboard.css"; // coquille « dash » partagée (sidebar, topbar, modal…)
 import "./ConseilDashboard.css"; // barres de progression, badges, tables (crm-*)
 import "./CommercialDashboard.css"; // spécifique au tableau de bord commercial
-import { HouseIcon, XIcon } from "../components/icons";
+import { XIcon } from "../components/icons";
 import RappelsMenu from "../rappels/RappelsMenu";
 import AlertesMenu from "../alertes/AlertesMenu";
 import AlertesBanner from "../alertes/AlertesBanner";
@@ -361,11 +361,8 @@ export default function CommercialDashboard({ onLogout }: { onLogout?: () => voi
       {/* --- Sidebar --- */}
       <aside className="dash__sidebar">
         <div className="dash__brand">
-          <span className="dash__brand-mark">
-            <HouseIcon />
-          </span>
+          <img className="brand-logo" src="/logo-taverne.png" alt="Taverne" />
           <span className="dash__brand-text">
-            <span className="dash__brand-name">Taverne</span>
             <span className="dash__brand-sub">Espace Chargé commercial</span>
           </span>
         </div>

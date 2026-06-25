@@ -91,3 +91,34 @@ button {
   font: inherit;
   cursor: pointer;
 }
+
+/* ===========================================================================
+   Logo de marque (image) — remplace l'ancien carré + mot « Taverne ».
+   Le logo « fond marron » contient déjà le mot Taverne et la baseline.
+   --------------------------------------------------------------------------- */
+.brand-logo {
+  display: block;
+  height: 2.3rem;
+  width: auto;
+  border-radius: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* Navbar de la landing (fond clair) */
+.lp__brand .brand-logo {
+  height: 2.2rem;
+}
+
+/* Pied de page de la landing */
+.lp__footer .brand-logo {
+  height: 1.9rem;
+  border-radius: 0.45rem;
+}
+
+/* En-tête du modal « Choisissez votre espace » */
+.sm__logo {
+  height: 2.6rem;
+  width: auto;
+  border-radius: 0.55rem;
+  margin-bottom: 0.9rem;
+}

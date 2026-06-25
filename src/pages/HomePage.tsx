@@ -13,7 +13,6 @@ import {
   CreditCardIcon,
   EyeIcon,
   GlobeIcon,
-  HouseIcon,
   KanbanIcon,
   ListChecksIcon,
   LockIcon,
@@ -160,10 +159,7 @@ export default function HomePage() {
       <header className="lp__nav">
         <div className="lp__container lp__nav-inner">
           <a className="lp__brand" href="#">
-            <span className="lp__brand-mark">
-              <HouseIcon />
-            </span>
-            Taverne
+            <img className="brand-logo" src="/logo-taverne.png" alt="Taverne — Un intérieur à votre image" />
           </a>
 
           <nav className="lp__nav-links">
@@ -358,6 +354,7 @@ export default function HomePage() {
       {/* --- Footer --- */}
       <footer className="lp__footer">
         <div className="lp__container lp__footer-inner">
+          <img className="brand-logo" src="/logo-taverne.png" alt="Taverne" />
           <span>© {new Date().getFullYear()} ERP Taverne</span>
           <span>Gestion d'entreprise · Côte d'Ivoire · FCFA</span>
         </div>

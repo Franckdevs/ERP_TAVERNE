@@ -603,6 +603,23 @@ src/
   Imports `BellIcon` / `Bell` devenus inutiles retirés.
 - Vérifié : **`tsc` OK** + **build Vite OK** (1931 modules).
 
+### 2026-06-25 — Logo officiel La Taverne partout
+- Logo client (`logo/Logo taverne fond marron Png  .png` — lockup lampe +
+  « Taverne » + baseline « Un intérieur à votre image », fond marron) copié dans
+  **`public/logo-taverne.png`** (servi en `/logo-taverne.png`).
+- **Classe globale `.brand-logo`** (`styles/globals.css`) + variantes navbar /
+  footer / modal (`.sm__logo`).
+- Remplace l'ancien **carré `…-brand-mark` + mot « Taverne »** (le logo contient
+  déjà le wordmark) — le **sous-titre par espace est conservé** :
+  - **Landing** : navbar (`lp__brand`) + **pied de page** + **modal**
+    « Choisissez votre espace » (`SpaceModal`).
+  - **7 sidebars** : Comptabilité (`cc-sb__brand`), Admin (`sb__brand`),
+    Stock (`stk-sb__brand`), Assistanat / Conseil / Commercial / Personnel
+    (`dash__brand`).
+- Imports d'icône devenus inutiles retirés (`HouseIcon` / `House`).
+- *Favicon laissé sur `taverne.svg`* (le lockup large est illisible en 16 px).
+- Vérifié : **`tsc --noEmit` OK** + **build Vite OK**.
+
 ---
 
 ## ▶️ Commandes

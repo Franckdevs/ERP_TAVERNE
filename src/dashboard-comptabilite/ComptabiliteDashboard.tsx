@@ -18,7 +18,6 @@ import {
   MoonIcon,
   SunIcon,
   LogOutIcon,
-  HouseIcon,
   SettingsIcon,
 } from "./icons";
 import DashboardView from "./views/DashboardView";
@@ -110,9 +109,8 @@ export default function ComptabiliteDashboard({ onLogout }: { onLogout?: () => v
       {/* --- Sidebar --- */}
       <aside className={`cc-sb${drawer ? " is-open" : ""}`}>
         <div className="cc-sb__brand">
-          <span className="cc-sb__brand-mark"><HouseIcon /></span>
+          <img className="brand-logo" src="/logo-taverne.png" alt="Taverne" />
           <span className="cc-sb__brand-text">
-            <span className="cc-sb__brand-name">Taverne</span>
             <span className="cc-sb__brand-sub">Espace Comptabilité</span>
           </span>
         </div>

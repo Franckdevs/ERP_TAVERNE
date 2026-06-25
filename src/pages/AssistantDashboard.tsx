@@ -9,7 +9,6 @@ import type {
 import "./AssistantDashboard.css";
 import {
   CalendarIcon,
-  HouseIcon,
   MailIcon,
   MessageIcon,
   XIcon,
@@ -706,11 +705,8 @@ export default function AssistantDashboard({
       {/* --- Sidebar --- */}
       <aside className="dash__sidebar">
         <div className="dash__brand">
-          <span className="dash__brand-mark">
-            <HouseIcon />
-          </span>
+          <img className="brand-logo" src="/logo-taverne.png" alt="Taverne" />
           <span className="dash__brand-text">
-            <span className="dash__brand-name">Taverne</span>
             <span className="dash__brand-sub">Espace Assistanat</span>
           </span>
         </div>

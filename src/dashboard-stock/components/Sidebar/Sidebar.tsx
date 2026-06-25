@@ -1,5 +1,5 @@
 import "./Sidebar.css";
-import { House, LogOut } from "../../../icons";
+import { LogOut } from "../../../icons";
 import { NAV, USER, type ViewId } from "../../data";
 import RappelsMenu from "../../../rappels/RappelsMenu";
 
@@ -13,11 +13,8 @@ export default function Sidebar({ active, onNavigate, onLogout }: Props) {
   return (
     <aside className="stk-sb">
       <div className="stk-sb__brand">
-        <span className="stk-sb__brand-mark">
-          <House />
-        </span>
+        <img className="brand-logo" src="/logo-taverne.png" alt="Taverne" />
         <span className="stk-sb__brand-text">
-          <span className="stk-sb__brand-name">Taverne</span>
           <span className="stk-sb__brand-sub">Espace Stock</span>
         </span>
       </div>
